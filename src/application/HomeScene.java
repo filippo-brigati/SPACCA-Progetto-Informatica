@@ -3,7 +3,6 @@ package application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
@@ -24,8 +23,6 @@ public class HomeScene {
     private Runnable onLogoutHandle;
     @SuppressWarnings("unused")
 	private Stage primaryStage;
-    
-    private Label errorLabel;
     
     private boolean isFirstInviaClick = true;
     private String currentFileName = "";
@@ -55,14 +52,17 @@ public class HomeScene {
         usernameField.setPrefWidth(0.5 * 900); // 50% of screen width
 
         // "Invia" button
-        Button inviaButton = new Button("Invia");
+        Button inviaButton = new Button("Add Player");
         inviaButton.setOnAction(event -> this.handleInviaButtonClick());
         
         usernameList = new TextFlow();
         usernameList.setTextAlignment(TextAlignment.CENTER);
         usernameList.setPrefWidth(900);
+        
+        Button nextStepButton = new Button("Next");
+        nextStepButton.setOnAction(event -> onLogoutHandle.run());
 
-        centerPane.getChildren().addAll(usernameField, inviaButton, usernameList);
+        centerPane.getChildren().addAll(usernameField, inviaButton, usernameList, nextStepButton);
         rootPane.setCenter(centerPane);
 
         Scene scene1 = new Scene(rootPane, 900, 600);

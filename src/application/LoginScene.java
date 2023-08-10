@@ -1,7 +1,6 @@
 package application;
 
 import javafx.scene.Scene;
-import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,14 +11,20 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
+import javafx.scene.layout.StackPane;
+
+import java.io.File;
 
 public class LoginScene {
     private Scene scene;
     private Runnable onLoginSuccess;
+    private Runnable onGameStart;
+    
     @SuppressWarnings("unused")
 	private Stage primaryStage;
     
     private Label errorLabel;
+    private Label fileNotExistLabel;
     
     private static final String ADMIN_USERNAME = "admin";
     private static final String ADMIN_PASSWORD = "admin";
@@ -27,7 +32,7 @@ public class LoginScene {
     public LoginScene(Stage primaryStage) {
         this.primaryStage = primaryStage;
 
-        Group group1 = new Group();
+        StackPane root = new StackPane();
 
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
@@ -47,22 +52,42 @@ public class LoginScene {
         // Create the error label
         errorLabel = new Label();
         errorLabel.setTextFill(Color.RED);
+        
+        fileNotExistLabel = new Label();
+        fileNotExistLabel.setTextFill(Color.RED);
+        
+        Text gameCodeLabel = new Text("Enter game code:");
+        
+        TextField gameCodeField = new TextField();
+        Button enterGameButton = new Button("Enter");
+        enterGameButton.setOnAction(event -> checkExistringMatch(gameCodeField.getText()));
 
         gridPane.add(titleLabel, 0, 0, 2, 1);
         gridPane.add(usernameField, 0, 1);
         gridPane.add(passwordField, 0, 2);
         gridPane.add(loginButton, 0, 3);
         gridPane.add(errorLabel, 1, 3);
+        
+        GridPane.setMargin(gameCodeLabel, new Insets(30, 0, 0, 0));
+        
+        gridPane.add(gameCodeLabel, 0, 4);
+        gridPane.add(gameCodeField, 0, 5);
+        gridPane.add(enterGameButton, 1, 5);
+        gridPane.add(fileNotExistLabel, 1, 3);
 
-        group1.getChildren().add(gridPane);
+        root.getChildren().add(gridPane);
 
-        Scene scene1 = new Scene(group1, 900, 600);
+        Scene scene1 = new Scene(root, 900, 600);
 
         this.scene = scene1;
     }
 
     public void setOnLoginSuccess(Runnable handler) {
         onLoginSuccess = handler;
+    }
+    
+    public void setOnGameStart(Runnable handler) {
+        onGameStart = handler;
     }
 
     public Scene getScene() {
@@ -80,6 +105,17 @@ public class LoginScene {
         		errorLabel.setText("Invalid username or password!");
         	}
         }
+    }
+    
+    private void checkExistringMatch(String fileName) {
+    	File file = new File("./data/" + fileName + ".txt");
+    	
+    	if(file.exists()) {
+    		onGameStart.run();
+    	} else {
+    		System.out.println("il file" + fileName + " non esiste");
+    		fileNotExistLabel.setText("Game code does not exist");
+    	}
     }
 }
 
