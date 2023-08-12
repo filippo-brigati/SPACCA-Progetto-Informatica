@@ -20,6 +20,8 @@ public class LoginScene {
     private Runnable onLoginSuccess;
     private Runnable onGameStart;
     
+    private String gameCode;
+    
     @SuppressWarnings("unused")
 	private Stage primaryStage;
     
@@ -93,6 +95,10 @@ public class LoginScene {
     public Scene getScene() {
         return scene;
     }
+    
+    public String getGameCode() {
+    	return this.gameCode;
+    }
 
     private void handleLoginButtonClick(String username, String password) {
         // Perform login validation
@@ -111,6 +117,7 @@ public class LoginScene {
     	File file = new File("./data/" + fileName + ".txt");
     	
     	if(file.exists()) {
+    		this.gameCode = fileName;
     		onGameStart.run();
     	} else {
     		System.out.println("il file" + fileName + " non esiste");

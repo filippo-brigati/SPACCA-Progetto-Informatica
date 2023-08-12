@@ -21,7 +21,7 @@ public class Main extends Application {
     private void createLoginView() {
         LoginScene login = new LoginScene(primaryStage);
         login.setOnLoginSuccess(() -> switchToHomeView());
-        login.setOnGameStart(() -> switchToGameView());
+        login.setOnGameStart(() -> switchToGameView(login.getGameCode()));
 
         // Set the login view as the root of the scene
         primaryStage.setTitle("LOGIN - SPACCA");
@@ -37,8 +37,8 @@ public class Main extends Application {
     	primaryStage.setScene(home.getScene());
     }
     
-    private void createGameView() {
-    	GameScene game = new GameScene(primaryStage);
+    private void createGameView(String gameCode) {
+    	GameScene game = new GameScene(primaryStage, gameCode);
     	game.setOnLogoutHandle(() -> switchToLoginView());
     	
     	primaryStage.setTitle("GAME - SPACCA");
@@ -55,8 +55,8 @@ public class Main extends Application {
         createLoginView();
     }
     
-    private void switchToGameView() {
-    	createGameView();
+    private void switchToGameView(String gameCode) {
+    	createGameView(gameCode);
     }
 
     public static void main(String[] args) {

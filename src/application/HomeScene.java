@@ -14,8 +14,12 @@ import javafx.scene.text.TextFlow;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class HomeScene {
@@ -60,7 +64,7 @@ public class HomeScene {
         usernameList.setPrefWidth(900);
         
         Button nextStepButton = new Button("Next");
-        nextStepButton.setOnAction(event -> onLogoutHandle.run());
+        nextStepButton.setOnAction(event -> this.generateDeckAndUserCard());
 
         centerPane.getChildren().addAll(usernameField, inviaButton, usernameList, nextStepButton);
         rootPane.setCenter(centerPane);
@@ -105,13 +109,15 @@ public class HomeScene {
         File file = new File(fullPath);
         
         try {
+        	boolean isEmpty = file.length() == 0;
+        	
             BufferedWriter writer = new BufferedWriter(new FileWriter(fullPath, true));
 
-            if (file.exists()) {
+            if (!isEmpty) {
                 writer.newLine();
             }
-
-            writer.write(username);
+            
+            writer.write(username + ",");
             writer.close();
             
             updateUsernameList(username);
@@ -137,6 +143,76 @@ public class HomeScene {
         if (!newUsername.isEmpty()) {
             Text usernameText = new Text(newUsername + ", ");
             usernameList.getChildren().add(usernameText);
+        }
+    }
+    
+    private void generateDeckAndUserCard() {
+        ArrayList<Integer> deck = new ArrayList<>();
+    	String fullPath = "./data/" + this.currentFileName;
+        
+        for (int number = 1; number <= 9; number++) {
+            for (int count = 0; count < 4; count++) {
+                deck.add(number);
+            }
+        }
+        
+        Collections.shuffle(deck);
+        
+        ArrayList<String> usernames = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(fullPath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (!line.startsWith("DECK:")) {
+                    usernames.add(line.trim());
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        Random random = new Random();
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fullPath, false))) {
+            for (String username : usernames) {
+                writer.write(username);
+                for (int i = 0; i < 5; i++) {
+                    int randomIndex = random.nextInt(deck.size());
+                    int card = deck.get(randomIndex);
+                    writer.write(String.valueOf(card));
+                    /*
+                    if (i < 4) {
+                        writer.write(",");
+                    }
+                    */
+                    deck.remove(randomIndex);
+                }
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        System.out.println("Created deck: " + deck);
+        
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fullPath, true));
+
+            //writer.newLine();
+            
+            String fileDeck = "DECK:";
+            
+            for (Integer card : deck) {
+                //fileDeck += card + ",";
+                fileDeck += card;
+            }
+            
+            writer.write(fileDeck);
+            writer.close();
+            
+            onLogoutHandle.run();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
