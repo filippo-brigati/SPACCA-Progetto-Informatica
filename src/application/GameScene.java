@@ -271,6 +271,8 @@ public class GameScene {
 	}
 	
 	private void onImageClick(Integer card, ImageView imageView) {
+		String fileName = "./data/" + this.gameCode + ".txt";
+		
 		Integer valid = 0;
 		if(this.gameCard != "back") {
 			valid = Integer.parseInt(this.gameCard) + 1;
@@ -298,6 +300,51 @@ public class GameScene {
 	        }
 	        
 	        this.removeCardFromFile(card);
+		} else {
+        	ArrayList<String> updatedLines = new ArrayList<>();
+        	Integer deckNumber = 0;
+        	
+	        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+	            String line;
+	            while ((line = reader.readLine()) != null) {
+	                if (line.startsWith("DECK:")) {
+	                    String deckRow = line.substring(5);
+	                    deckNumber = Integer.parseInt(deckRow.substring(0, 1));
+	                    
+	                    String newDeck = deckRow.substring(1, deckRow.length());
+	                    
+	                    updatedLines.add("DECK:" + newDeck);
+	                    
+	                    this.playerCardArray.add(deckNumber);
+	                    ImageView newImageView = new ImageView(new Image(new File("./assets/" + deckNumber + ".png").toURI().toString()));
+	    	            newImageView.setFitWidth(120);
+	    	            newImageView.setFitHeight(200);
+	                    
+	                    this.bottomImages.getChildren().add(newImageView);
+	                } else {
+	                	updatedLines.add(line);
+	                }
+	            }
+	            
+	            for (int i = 0; i < updatedLines.size(); i++) {
+	            	String l = updatedLines.get(i);
+                	if(l.startsWith(this.currentPlayer + ",")) {
+                		l = l + deckNumber.toString();
+                		updatedLines.set(i, l);
+                	}
+                }
+	        } catch (IOException | NumberFormatException e) {
+	            e.printStackTrace();
+	        }
+	        
+	        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, false))) {
+	            for (String updatedLine : updatedLines) {
+	                writer.write(updatedLine);
+	                writer.newLine();
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
 		}
 	}
 }
