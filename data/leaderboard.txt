@@ -1,0 +1,4 @@
+Filippo,650
+Chiara,450
+Paolo,200
+Marta,100

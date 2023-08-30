@@ -48,6 +48,8 @@ public class GameScene {
     private Label gameInfoLabel;
     private VBox topPane;
     private Button logoutButton;
+    
+    private Runnable onGameWin;
 
     public GameScene(Stage primaryStage, String gameCode) {
         this.primaryStage = primaryStage;
@@ -110,6 +112,10 @@ public class GameScene {
     
     public void setOnLogoutHandle(Runnable handler) {
         onLogoutHandle = handler;
+    }
+    
+    public void setOnGameWinHandle(Runnable handler) {
+    	onGameWin = handler;
     }
 
 	public String getGameCode() {
@@ -196,7 +202,7 @@ public class GameScene {
                 
                 Runnable task = () -> {
                     Platform.runLater(() -> {
-                        System.out.println("Function executed after 2 seconds.");
+                        //System.out.println("Function executed after 2 seconds.");
                         startBotLogic();
                     });
                 };
@@ -323,6 +329,7 @@ public class GameScene {
 			
 			//this.playerCardArray.remove(card);
 			this.playerCardArray.removeIf(item -> item == card);
+			
 	        for (Integer playerCard : playerCardArray) {
 	        	System.out.println("CARD:" + playerCard);
 	            ImageView newImageView = new ImageView(new Image(new File("./assets/" + playerCard + ".png").toURI().toString()));
@@ -333,6 +340,11 @@ public class GameScene {
 	            
 	            this.bottomImages.getChildren().add(newImageView);
 	        }
+	        
+			if(this.playerCardArray.size() == 0) {
+				System.out.println("CIAODVODSVNOKSNBOKSDMVO");
+				onGameWin.run();
+			}
 	        
 	        this.removeCardFromFile(card);
 		} else {

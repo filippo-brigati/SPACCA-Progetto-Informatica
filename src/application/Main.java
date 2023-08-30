@@ -40,9 +40,17 @@ public class Main extends Application {
     private void createGameView(String gameCode) {
     	GameScene game = new GameScene(primaryStage, gameCode);
     	game.setOnLogoutHandle(() -> switchToLoginView());
+    	game.setOnGameWinHandle(() -> switchToWinView(gameCode));
     	
     	primaryStage.setTitle("GAME - SPACCA");
     	primaryStage.setScene(game.getScene());
+    }
+    
+    private void createWinView(String gameCode) {
+    	WinnerScene winner = new WinnerScene(primaryStage, gameCode);
+    	
+    	primaryStage.setTitle("GAME WINNER - SPACCA");
+    	primaryStage.setScene(winner.getScene());
     }
 
     // Method to switch to the home view
@@ -57,6 +65,10 @@ public class Main extends Application {
     
     private void switchToGameView(String gameCode) {
     	createGameView(gameCode);
+    }
+    
+    private void switchToWinView(String gameCode) {
+    	createWinView(gameCode);
     }
 
     public static void main(String[] args) {
