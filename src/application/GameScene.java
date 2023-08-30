@@ -133,7 +133,6 @@ public class GameScene {
                             System.out.println("DIGIT: " +  digit);
                             this.playerCardArray.add(digit);
                         } catch (NumberFormatException e) {
-                            // Parsing error here
                         	System.out.println(e);
                         }
                     }
@@ -146,15 +145,28 @@ public class GameScene {
             
             System.out.println("PLAYER CARD: "  + this.playerCardArray);
             
-            for (Integer playerCard : playerCardArray) {
-            	System.out.println("CARD:" + playerCard);
-                ImageView imageView = new ImageView(new Image(new File("./assets/" + playerCard + ".png").toURI().toString()));
-                imageView.setFitWidth(120);
-                imageView.setFitHeight(200);
-                
-                imageView.setOnMouseClicked(event -> this.onImageClick(playerCard, (ImageView) event.getSource()));
-                
-                this.bottomImages.getChildren().add(imageView);
+            if(this.currentPlayer.contains("BOT")) {
+                for (Integer playerCard : playerCardArray) {
+                	System.out.println("CARD:" + playerCard);
+                    ImageView imageView = new ImageView(new Image(new File("./assets/back.png").toURI().toString()));
+                    imageView.setFitWidth(120);
+                    imageView.setFitHeight(200);
+                    
+                    imageView.setOnMouseClicked(event -> this.onImageClick(playerCard, (ImageView) event.getSource()));
+                    
+                    this.bottomImages.getChildren().add(imageView);
+                }
+            } else {
+                for (Integer playerCard : playerCardArray) {
+                	System.out.println("CARD:" + playerCard);
+                    ImageView imageView = new ImageView(new Image(new File("./assets/" + playerCard + ".png").toURI().toString()));
+                    imageView.setFitWidth(120);
+                    imageView.setFitHeight(200);
+                    
+                    imageView.setOnMouseClicked(event -> this.onImageClick(playerCard, (ImageView) event.getSource()));
+                    
+                    this.bottomImages.getChildren().add(imageView);
+                }  	
             }
             
             this.logoutButton = new Button("Logout");
@@ -174,6 +186,10 @@ public class GameScene {
             BorderPane.setAlignment(this.topPane, Pos.CENTER);
             this.topPane.setAlignment(Pos.CENTER);
             this.rootPane.setTop(this.topPane);
+            
+            if(this.currentPlayer.contains("BOT")) {
+            	this.startBotLogic();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -274,23 +290,21 @@ public class GameScene {
 	
 	private void onImageClick(Integer card, ImageView imageView) {
 		String fileName = "./data/" + this.gameCode + ".txt";
-		
 		Integer valid = 0;
-		System.out.println("GAMECARD:" + this.gameCard);
+		
 		if(!this.gameCard.startsWith("back")) {
 			valid = Integer.parseInt(this.gameCard) + 1;
 		}
-		System.out.println("gamecard" + this.gameCard);
-		if(this.gameCard == "9") { valid = card; }
-		System.out.println(card + " - IS EQUAL - " + valid);
+		if(this.gameCard.contains("9")) { valid = card; }
+		
 		if(this.gameCard.equals("back") || card == valid) {
 			this.gameCard = card.toString();
-			
 			this.gameImage.setImage(new Image(new File("./assets/" + this.gameCard + ".png").toURI().toString()));
 			
 			this.bottomImages.getChildren().clear();
 			
-			this.playerCardArray.remove(card);
+			//this.playerCardArray.remove(card);
+			this.playerCardArray.removeIf(item -> item == card);
 	        for (Integer playerCard : playerCardArray) {
 	        	System.out.println("CARD:" + playerCard);
 	            ImageView newImageView = new ImageView(new Image(new File("./assets/" + playerCard + ".png").toURI().toString()));
@@ -361,6 +375,106 @@ public class GameScene {
 	        }
 		}
 		
+		this.updateCurrentCard();
+	}
+	
+	private void startBotLogic() {
+		String fileName = "./data/" + this.gameCode + ".txt";
+		boolean found = false;
+		
+		if(this.gameCard.startsWith("back")) {
+			Integer flag = this.playerCardArray.get(0);
+			
+			this.gameCard = flag.toString();
+			
+			this.gameImage = new ImageView(new Image(new File("./assets/" + this.gameCard + ".png").toURI().toString()));
+			this.gameImage.setImage(new Image(new File("./assets/" + this.gameCard + ".png").toURI().toString()));
+			
+        	this.playerCardArray.removeIf(card -> card == Integer.parseInt(this.gameCard));
+        	
+        	this.removeCardFromFile(Integer.parseInt(this.gameCard));
+		} else {
+			System.out.println("CARTE DEL BOT: " + this.playerCardArray);
+	        for (Integer playerCard : this.playerCardArray) {
+	        	Integer valid = Integer.parseInt(this.gameCard) + 1;
+	        	System.out.println("CONFRONTO: " + valid + "," + playerCard);
+	        	if(valid == playerCard && found == false) {
+	        		found = true;
+	        		
+	        		System.out.println("FOUND: " + playerCard);
+	        		
+	    			this.gameCard = playerCard.toString();
+	    			this.gameImage.setImage(new Image(new File("./assets/" + this.gameCard + ".png").toURI().toString()));
+	        	}
+	        }
+	        
+	        if(found == true) {
+	        	this.playerCardArray.removeIf(card -> card == Integer.parseInt(this.gameCard));
+	        	
+	        	this.removeCardFromFile(Integer.parseInt(this.gameCard));
+	        } else {
+	        	ArrayList<String> updatedLines = new ArrayList<>();
+	        	Integer deckNumber = 0;
+	        	
+		        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+		            String line;
+		            while ((line = reader.readLine()) != null) {
+		                if (line.startsWith("DECK:")) {
+		                    String deckRow = line.substring(5);
+		                    deckNumber = Integer.parseInt(deckRow.substring(0, 1));
+		                    
+		                    String newDeck = deckRow.substring(1, deckRow.length());
+		                    
+		                    updatedLines.add("DECK:" + newDeck);
+		                    
+		                    this.playerCardArray.add(deckNumber);
+		                    ImageView newImageView = new ImageView(new Image(new File("./assets/" + deckNumber + ".png").toURI().toString()));
+		    	            newImageView.setFitWidth(120);
+		    	            newImageView.setFitHeight(200);
+		                    
+		                    this.bottomImages.getChildren().add(newImageView);
+		                } else {
+		                	updatedLines.add(line);
+		                }
+		            }
+		            
+		            for (int i = 0; i < updatedLines.size(); i++) {
+		            	String l = updatedLines.get(i);
+	                	if(l.startsWith(this.currentPlayer + ",")) {
+	                		l = l + deckNumber.toString();
+	                		updatedLines.set(i, l);
+	                	}
+	                }
+		        } catch (IOException | NumberFormatException e) {
+		            e.printStackTrace();
+		        }
+		        
+		        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, false))) {
+		            for (String updatedLine : updatedLines) {
+		                writer.write(updatedLine);
+		                writer.newLine();
+		            }
+		            
+		            writer.close();
+		           
+			        if(this.currentPlayerIndex < this.playerArray.size() - 1) {
+			        	this.currentPlayerIndex = this.currentPlayerIndex + 1;
+			        } else {
+			        	this.currentPlayerIndex = 0;
+			        }
+			        
+			        this.currentPlayer = this.playerArray.get(this.currentPlayerIndex);
+			        this.getPlayerCard();
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        }
+	        }
+		}
+        this.updateCurrentCard();
+	}
+	
+	private void updateCurrentCard() {
+		String fileName = "./data/" + this.gameCode + ".txt";
 	    ArrayList<String> lines = new ArrayList<>();
 	    
 	    try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {

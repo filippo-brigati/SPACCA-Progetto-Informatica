@@ -1,5 +1,0 @@
-filippo,2
-paolo,65
-matteo,938
-DECK:11628944979515883
-CURRENT:7
