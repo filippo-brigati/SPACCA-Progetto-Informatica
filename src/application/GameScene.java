@@ -2,6 +2,7 @@ package application;
 
 import java.io.File;
 
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -30,8 +31,6 @@ public class GameScene {
 	private Stage primaryStage;
     private String gameCode;
     
-    private String deckCard;
-    
     private ArrayList<String> playerArray = new ArrayList<>();
     private ArrayList<Integer> playerCardArray = new ArrayList<>();
     private String gameCard;
@@ -51,7 +50,7 @@ public class GameScene {
         this.gameCode = gameCode;
         this.rootPane = new BorderPane();
         
-        this.gameCard = "back";
+        this.gameCard = null;
         
         
         this.setUpGame();
@@ -194,18 +193,21 @@ public class GameScene {
                         String extractedData = line.substring(0, commaIndex).trim();
                         this.playerArray.add(extractedData);
                         
-                        System.out.println(extractedData);
+                        System.out.println("extracted: " + extractedData);
                     }
-                } else {
+                }
+                if(line.trim().startsWith("CURRENT:")) {
                 	int doubleDotIndex = line.indexOf(':');
-                	this.deckCard = line.toString().substring(doubleDotIndex+1, line.length()).trim();
+                	String flag = line.toString().substring(doubleDotIndex+1, line.length()).trim();
+                	
+                	this.gameCard = flag.toString().toLowerCase();
+                	System.out.println("g"+this.gameCard);
                 }
             }
             
             this.currentPlayer = this.playerArray.get(0);
             this.currentPlayerIndex = 0;
             
-            System.out.println(this.deckCard);
 
             reader.close();
         } catch (IOException e) {
@@ -254,7 +256,7 @@ public class GameScene {
 	        
 	        writer.close();
 	        
-	        if(this.currentPlayerIndex < this.playerArray.size()) {
+	        if(this.currentPlayerIndex < this.playerArray.size() - 1) {
 	        	this.currentPlayerIndex = this.currentPlayerIndex + 1;
 	        } else {
 	        	this.currentPlayerIndex = 0;
@@ -274,16 +276,17 @@ public class GameScene {
 		String fileName = "./data/" + this.gameCode + ".txt";
 		
 		Integer valid = 0;
-		if(this.gameCard != "back") {
+		System.out.println("GAMECARD:" + this.gameCard);
+		if(!this.gameCard.startsWith("back")) {
 			valid = Integer.parseInt(this.gameCard) + 1;
 		}
-		if(this.gameCard == "9") { valid = 1; }
+		System.out.println("gamecard" + this.gameCard);
+		if(this.gameCard == "9") { valid = card; }
 		System.out.println(card + " - IS EQUAL - " + valid);
 		if(this.gameCard.equals("back") || card == valid) {
 			this.gameCard = card.toString();
 			
 			this.gameImage.setImage(new Image(new File("./assets/" + this.gameCard + ".png").toURI().toString()));
-			//this.bottomImages.getChildren().removeIf(node -> node instanceof ImageView && node.getId().equals(card.toString()));
 			
 			this.bottomImages.getChildren().clear();
 			
@@ -342,9 +345,50 @@ public class GameScene {
 	                writer.write(updatedLine);
 	                writer.newLine();
 	            }
+	            
+	            writer.close();
+	           
+		        if(this.currentPlayerIndex < this.playerArray.size() - 1) {
+		        	this.currentPlayerIndex = this.currentPlayerIndex + 1;
+		        } else {
+		        	this.currentPlayerIndex = 0;
+		        }
+		        
+		        this.currentPlayer = this.playerArray.get(this.currentPlayerIndex);
+		        this.getPlayerCard();
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	        }
 		}
+		
+	    ArrayList<String> lines = new ArrayList<>();
+	    
+	    try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+	        String line;
+	        while ((line = reader.readLine()) != null) {
+	            if (line.startsWith("CURRENT:")) {
+	            	line = "CURRENT:" + this.gameCard.toString();
+	            	
+	            	lines.add(line);
+	            } else {
+	                lines.add(line);
+	            }
+	        }
+	        
+	        reader.close();
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+	        for (String line : lines) {
+	            writer.write(line);
+	            writer.newLine();
+	        }
+	        
+	        writer.close(); 
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
 	}
 }

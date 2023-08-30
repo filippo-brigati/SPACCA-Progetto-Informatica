@@ -201,6 +201,7 @@ public class HomeScene {
             //writer.newLine();
             
             String fileDeck = "DECK:";
+            String currentCard = "CURRENT:back";
             
             for (Integer card : deck) {
                 //fileDeck += card + ",";
@@ -208,6 +209,8 @@ public class HomeScene {
             }
             
             writer.write(fileDeck);
+            writer.newLine();
+            writer.write(currentCard);
             writer.close();
             
             onLogoutHandle.run();
