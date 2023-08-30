@@ -2,7 +2,7 @@ package application;
 
 import java.io.File;
 
-
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -23,6 +23,10 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class GameScene {
     private Scene scene;
@@ -188,7 +192,21 @@ public class GameScene {
             this.rootPane.setTop(this.topPane);
             
             if(this.currentPlayer.contains("BOT")) {
-            	this.startBotLogic();
+                ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+                
+                Runnable task = () -> {
+                    Platform.runLater(() -> {
+                        System.out.println("Function executed after 2 seconds.");
+                        startBotLogic();
+                    });
+                };
+
+                int timeoutInSeconds = 2; // Timeout duration in seconds
+                executorService.schedule(task, timeoutInSeconds, TimeUnit.SECONDS);
+                
+                // Don't forget to shut down the executor when done
+                executorService.shutdown();
+            	
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -386,7 +404,6 @@ public class GameScene {
 			Integer flag = this.playerCardArray.get(0);
 			
 			this.gameCard = flag.toString();
-			
 			this.gameImage = new ImageView(new Image(new File("./assets/" + this.gameCard + ".png").toURI().toString()));
 			this.gameImage.setImage(new Image(new File("./assets/" + this.gameCard + ".png").toURI().toString()));
 			
