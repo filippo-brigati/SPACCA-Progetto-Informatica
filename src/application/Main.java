@@ -11,15 +11,15 @@ public class Main extends Application {
         this.primaryStage = primaryStage;
 
         // Create the initial view
-        createLoginView();
+        createLoginView(null);
 
         primaryStage.setTitle("SPACCA");
         primaryStage.show();
     }
 
     // Method to create the login view
-    private void createLoginView() {
-        LoginScene login = new LoginScene(primaryStage);
+    private void createLoginView(String fileCode) {
+        LoginScene login = new LoginScene(fileCode);
         login.setOnLoginSuccess(() -> switchToHomeView());
         login.setOnGameStart(() -> switchToGameView(login.getGameCode()));
 
@@ -28,18 +28,19 @@ public class Main extends Application {
         primaryStage.setScene(login.getScene());
     }
 
-    // Method to create the home view
+    // Method to create the adminScene view
     private void createHomeView() {
-    	HomeScene home = new HomeScene(primaryStage);
-    	home.setOnLogoutHandle(() -> switchToLoginView());
+    	AdminScene adminScene = new AdminScene();
+    	adminScene.setOnLogoutHandle(() -> switchToLoginView(null));
+    	adminScene.setOnCreateGameHandle(() -> switchToGameSetupView(adminScene.getIsTournament()));
     	
-    	primaryStage.setTitle("HOME - SPACCA");
-    	primaryStage.setScene(home.getScene());
+    	primaryStage.setTitle("ADMIN - SPACCA");
+    	primaryStage.setScene(adminScene.getScene());
     }
     
     private void createGameView(String gameCode) {
     	GameScene game = new GameScene(primaryStage, gameCode);
-    	game.setOnLogoutHandle(() -> switchToLoginView());
+    	game.setOnLogoutHandle(() -> switchToLoginView(null));
     	game.setOnGameWinHandle(() -> switchToWinView(gameCode));
     	
     	primaryStage.setTitle("GAME - SPACCA");
@@ -47,10 +48,22 @@ public class Main extends Application {
     }
     
     private void createWinView(String gameCode) {
-    	WinnerScene winner = new WinnerScene(primaryStage, gameCode);
+    	WinnerScene winner = new WinnerScene(gameCode);
     	
     	primaryStage.setTitle("GAME WINNER - SPACCA");
     	primaryStage.setScene(winner.getScene());
+    }
+    
+    private void createGameSetupView(boolean isTournament) {
+    	GameSetupScene gameSetup = new GameSetupScene(isTournament);
+    	gameSetup.setOnLogoutHandle(() -> switchToLoginView(gameSetup.getFileName()));
+    	
+    	String title = "";
+    	if(isTournament == false) { title = "SIMPLE MATCH SETUP - SPACCA"; }
+    	else { title = "TOURNAMENT SETUP - SPACCA"; }
+    	
+    	primaryStage.setTitle(title);
+    	primaryStage.setScene(gameSetup.getScene());
     }
 
     // Method to switch to the home view
@@ -59,8 +72,8 @@ public class Main extends Application {
     }
 
     // Method to switch to the login view
-    private void switchToLoginView() {
-        createLoginView();
+    private void switchToLoginView(String fileCode) {
+        createLoginView(fileCode);
     }
     
     private void switchToGameView(String gameCode) {
@@ -69,6 +82,10 @@ public class Main extends Application {
     
     private void switchToWinView(String gameCode) {
     	createWinView(gameCode);
+    }
+    
+    private void switchToGameSetupView(boolean isTournament) {
+    	createGameSetupView(isTournament);
     }
 
     public static void main(String[] args) {

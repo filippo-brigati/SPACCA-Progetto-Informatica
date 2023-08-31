@@ -8,7 +8,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.StackPane;
@@ -22,18 +21,13 @@ public class LoginScene {
     
     private String gameCode;
     
-    @SuppressWarnings("unused")
-	private Stage primaryStage;
-    
     private Label errorLabel;
     private Label fileNotExistLabel;
     
     private static final String ADMIN_USERNAME = "admin";
     private static final String ADMIN_PASSWORD = "admin";
 
-    public LoginScene(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-
+    public LoginScene(String fileCode) {
         StackPane root = new StackPane();
 
         GridPane gridPane = new GridPane();
@@ -72,9 +66,18 @@ public class LoginScene {
         
         GridPane.setMargin(gameCodeLabel, new Insets(30, 0, 0, 0));
         
+        Text codeLabel = new Text("Game code: " + fileCode);
+        
+        if(fileCode != null) {
+        	gridPane.add(codeLabel, 0, 4);
+        }
+        
         gridPane.add(gameCodeLabel, 0, 4);
         gridPane.add(gameCodeField, 0, 5);
         gridPane.add(enterGameButton, 1, 5);
+        
+        
+        
         gridPane.add(fileNotExistLabel, 1, 3);
 
         root.getChildren().add(gridPane);

@@ -1,104 +1,101 @@
 package application;
 
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.text.TextFlow;
-
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-public class HomeScene {
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+
+public class GameSetupScene {
     private Scene scene;
     private Runnable onLogoutHandle;
-    @SuppressWarnings("unused")
-	private Stage primaryStage;
+    
+    private boolean isTournament;
     
     private boolean isFirstInviaClick = true;
     private String currentFileName = "";
-    private TextField usernameField;
-    private TextFlow usernameList;
-
-    public HomeScene(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-
+    private String title = "";
+	
+	public GameSetupScene(boolean isTournament) {
+		this.isTournament = isTournament;
+		this.interfaceSetup();
+		
+        // Create UI components
+        Label titleLabel = new Label(title);
+        titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        
         Button logoutButton = new Button("Logout");
         logoutButton.setOnAction(event -> onLogoutHandle.run());
-
-        BorderPane rootPane = new BorderPane();
-
-        StackPane topRightPane = new StackPane(logoutButton);
-        BorderPane.setAlignment(topRightPane, Pos.TOP_RIGHT);
-        rootPane.setTop(topRightPane);
-
-        // Create an HBox for center alignment
-        VBox centerPane = new VBox(10);
-        centerPane.setAlignment(Pos.CENTER);
-        centerPane.setMaxWidth(500);
-
-        // Username input with 50% width
-        usernameField = new TextField();
-        usernameField.setPromptText("Enter username");
-        usernameField.setPrefWidth(0.5 * 900); // 50% of screen width
-
-        // "Invia" button
-        Button inviaButton = new Button("Add Player");
-        inviaButton.setOnAction(event -> this.handleInviaButtonClick());
         
-        usernameList = new TextFlow();
-        usernameList.setTextAlignment(TextAlignment.CENTER);
-        usernameList.setPrefWidth(900);
+        Label playerInputLabel = new Label("Enter Player Name:");
+        TextField playerInputField = new TextField();
+        Button addButton = new Button("Add Player");
+        ListView<String> playerListView = new ListView<>();
         
-        Button nextStepButton = new Button("Next");
-        nextStepButton.setOnAction(event -> this.generateDeckAndUserCard());
+        addButton.setOnAction(e -> addPlayer(playerInputField, playerListView));
+        
+        Button doneButton = new Button("Done");
+        doneButton.setOnAction(event -> this.generateDeckAndUserCard());
 
-        centerPane.getChildren().addAll(usernameField, inviaButton, usernameList, nextStepButton);
-        rootPane.setCenter(centerPane);
+        VBox layout = new VBox(20, titleLabel, logoutButton, playerInputLabel, playerInputField, addButton, playerListView, doneButton);
+        layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(20));
 
-        Scene scene1 = new Scene(rootPane, 900, 600);
-
-        this.scene = scene1;
-    }
-
-    public Scene getScene() {
-        return scene;
-    }
-    
+        this.scene = new Scene(layout, 900, 600);
+	}
+	
+	public Scene getScene() {
+		return this.scene;
+	}
+	
+	public String getFileName() {
+		return this.currentFileName.substring(0, this.currentFileName.length() - 4);
+	}
+	
     public void setOnLogoutHandle(Runnable handler) {
         onLogoutHandle = handler;
     }
-
-    private void handleInviaButtonClick() {
-        String username = usernameField.getText();
+    
+    public void interfaceSetup() {
+    	if(this.isTournament == false) {
+    		title = "CREATE SIMPLE MATCH";
+    	} else {
+    		title = "CREATE TOURNAMENT";
+    	}
+    }
+	
+    private void addPlayer(TextField playerInputField, ListView<String> playerListView) {
+        String playerName = playerInputField.getText();
+        if (!playerName.isEmpty()) {
+            playerListView.getItems().add(playerName);
+            playerInputField.clear();
+        }
+        
         if (isFirstInviaClick) {
             currentFileName = generateRandomFileName();
             isFirstInviaClick = false;
         }
         
-        // Specify the directory where you want to create the file
         String directoryPath = "./data/";
         String fullPath = "";
         String randomFilename = "";
 
         if(this.isFirstInviaClick) {
-            // Generate a random filename with 9 lowercase letters
             randomFilename = generateRandomFileName();
 
-            // Construct the full path of the file
             fullPath = directoryPath + randomFilename;  
             this.currentFileName = randomFilename;
         } else {
@@ -117,17 +114,15 @@ public class HomeScene {
                 writer.newLine();
             }
             
-            writer.write(username + ",");
+            writer.write(playerName + ",");
             writer.close();
-            
-            updateUsernameList(username);
             
             System.out.println("File created: " + fullPath);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
+    
     private String generateRandomFileName() {
         Random random = new Random();
         String characters = "abcdefghijklmnopqrstuvwxyz";
@@ -137,13 +132,6 @@ public class HomeScene {
             fileName.append(characters.charAt(randomIndex));
         }
         return fileName.toString() + ".txt";
-    }
-    
-    private void updateUsernameList(String newUsername) {
-        if (!newUsername.isEmpty()) {
-            Text usernameText = new Text(newUsername + ", ");
-            usernameList.getChildren().add(usernameText);
-        }
     }
     
     private void generateDeckAndUserCard() {

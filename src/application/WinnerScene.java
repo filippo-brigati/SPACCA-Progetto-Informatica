@@ -5,7 +5,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 
@@ -15,14 +14,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WinnerScene {
-	private Stage primaryStage;
     private Scene scene;
     private String gameCode;
     
     private Map<String, Integer> playerScores = new HashMap<>();
 
-    public WinnerScene(Stage primaryStage, String gameCode) {
-        this.primaryStage = primaryStage;
+    public WinnerScene(String gameCode) {
         this.gameCode = gameCode;
 
         StackPane root = new StackPane();
