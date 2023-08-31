@@ -342,7 +342,6 @@ public class GameScene {
 	        }
 	        
 			if(this.playerCardArray.size() == 0) {
-				System.out.println("CIAODVODSVNOKSNBOKSDMVO");
 				onGameWin.run();
 			}
 	        
@@ -356,18 +355,23 @@ public class GameScene {
 	            while ((line = reader.readLine()) != null) {
 	                if (line.startsWith("DECK:")) {
 	                    String deckRow = line.substring(5);
-	                    deckNumber = Integer.parseInt(deckRow.substring(0, 1));
 	                    
-	                    String newDeck = deckRow.substring(1, deckRow.length());
-	                    
-	                    updatedLines.add("DECK:" + newDeck);
-	                    
-	                    this.playerCardArray.add(deckNumber);
-	                    ImageView newImageView = new ImageView(new Image(new File("./assets/" + deckNumber + ".png").toURI().toString()));
-	    	            newImageView.setFitWidth(120);
-	    	            newImageView.setFitHeight(200);
-	                    
-	                    this.bottomImages.getChildren().add(newImageView);
+	        			if(deckRow.length() <= 0) {
+	        				onGameWin.run();
+	        			} else {
+		                    deckNumber = Integer.parseInt(deckRow.substring(0, 1));
+		                    
+		                    String newDeck = deckRow.substring(1, deckRow.length());
+		                    
+		                    updatedLines.add("DECK:" + newDeck);
+		                    
+		                    this.playerCardArray.add(deckNumber);
+		                    ImageView newImageView = new ImageView(new Image(new File("./assets/" + deckNumber + ".png").toURI().toString()));
+		    	            newImageView.setFitWidth(120);
+		    	            newImageView.setFitHeight(200);
+		                    
+		                    this.bottomImages.getChildren().add(newImageView);
+	        			}
 	                } else {
 	                	updatedLines.add(line);
 	                }

@@ -26,8 +26,10 @@ public class GameSetupScene {
     private boolean isTournament;
     
     private boolean isFirstInviaClick = true;
-    private String currentFileName = "";
+    
+    private String currentFileName = null;
     private String title = "";
+    private Integer playerForRow = 0;
 	
 	public GameSetupScene(boolean isTournament) {
 		this.isTournament = isTournament;
@@ -62,7 +64,11 @@ public class GameSetupScene {
 	}
 	
 	public String getFileName() {
-		return this.currentFileName.substring(0, this.currentFileName.length() - 4);
+		if(this.currentFileName != null) {
+			return this.currentFileName.substring(0, this.currentFileName.length() - 4);	
+		} else {
+			return null;
+		}
 	}
 	
     public void setOnLogoutHandle(Runnable handler) {
@@ -85,39 +91,48 @@ public class GameSetupScene {
         }
         
         if (isFirstInviaClick) {
-            currentFileName = generateRandomFileName();
-            isFirstInviaClick = false;
+        	if(this.isTournament == false) {
+                this.currentFileName = generateRandomFileName();
+                isFirstInviaClick = false;	
+        	} else {
+        		this.currentFileName = "tr-" + generateRandomFileName();
+        		isFirstInviaClick = false;
+        	}
         }
         
         String directoryPath = "./data/";
         String fullPath = "";
-        String randomFilename = "";
 
-        if(this.isFirstInviaClick) {
-            randomFilename = generateRandomFileName();
-
-            fullPath = directoryPath + randomFilename;  
-            this.currentFileName = randomFilename;
-        } else {
-        	fullPath = directoryPath + this.currentFileName;
-        }
+        fullPath = directoryPath + this.currentFileName;
         
         System.out.println("FILE PATH: " + fullPath);
         File file = new File(fullPath);
         
         try {
-        	boolean isEmpty = file.length() == 0;
-        	
             BufferedWriter writer = new BufferedWriter(new FileWriter(fullPath, true));
-
-            if (!isEmpty) {
-                writer.newLine();
-            }
             
-            writer.write(playerName + ",");
+        	if(this.isTournament == false) {
+            	boolean isEmpty = file.length() == 0;
+
+                if (!isEmpty) {
+                    writer.newLine();
+                }
+                
+                writer.write(playerName + ",");	
+        	} else {
+        		if(this.playerForRow % 2 == 0 && this.playerForRow != 0) {
+        			writer.newLine();
+        			writer.write(playerName + ",");
+        		} else {
+        			if(this.playerForRow == 0) { writer.write(playerName + ","); }
+        			else { writer.write(playerName); }
+        		}
+        		
+        		this.playerForRow = this.playerForRow + 1;
+        	}
             writer.close();
             
-            System.out.println("File created: " + fullPath);
+            System.out.println("File create or edited: " + fullPath);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -135,75 +150,75 @@ public class GameSetupScene {
     }
     
     private void generateDeckAndUserCard() {
-        ArrayList<Integer> deck = new ArrayList<>();
-    	String fullPath = "./data/" + this.currentFileName;
-        
-        for (int number = 1; number <= 9; number++) {
-            for (int count = 0; count < 4; count++) {
-                deck.add(number);
-            }
-        }
-        
-        Collections.shuffle(deck);
-        
-        ArrayList<String> usernames = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(new FileReader(fullPath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (!line.startsWith("DECK:")) {
-                    usernames.add(line.trim());
+    	if(this.isTournament == false) {
+            ArrayList<Integer> deck = new ArrayList<>();
+        	String fullPath = "./data/" + this.currentFileName;
+            
+            for (int number = 1; number <= 9; number++) {
+                for (int count = 0; count < 4; count++) {
+                    deck.add(number);
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        Random random = new Random();
+            
+            Collections.shuffle(deck);
+            
+            ArrayList<String> usernames = new ArrayList<>();
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fullPath, false))) {
-            for (String username : usernames) {
-                writer.write(username);
-                for (int i = 0; i < 5; i++) {
-                    int randomIndex = random.nextInt(deck.size());
-                    int card = deck.get(randomIndex);
-                    writer.write(String.valueOf(card));
-                    /*
-                    if (i < 4) {
-                        writer.write(",");
+            try (BufferedReader br = new BufferedReader(new FileReader(fullPath))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    if (!line.startsWith("DECK:")) {
+                        usernames.add(line.trim());
                     }
-                    */
-                    deck.remove(randomIndex);
                 }
-                writer.newLine();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        System.out.println("Created deck: " + deck);
-        
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(fullPath, true));
+            
+            Random random = new Random();
 
-            //writer.newLine();
-            
-            String fileDeck = "DECK:";
-            String currentCard = "CURRENT:back";
-            
-            for (Integer card : deck) {
-                //fileDeck += card + ",";
-                fileDeck += card;
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fullPath, false))) {
+                for (String username : usernames) {
+                    writer.write(username);
+                    for (int i = 0; i < 5; i++) {
+                        int randomIndex = random.nextInt(deck.size());
+                        int card = deck.get(randomIndex);
+                        writer.write(String.valueOf(card));
+                        deck.remove(randomIndex);
+                    }
+                    writer.newLine();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
             
-            writer.write(fileDeck);
-            writer.newLine();
-            writer.write(currentCard);
-            writer.close();
+            System.out.println("Created deck: " + deck);
             
-            onLogoutHandle.run();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(fullPath, true));
+                
+                String fileDeck = "DECK:";
+                String currentCard = "CURRENT:back";
+                
+                for (Integer card : deck) {
+                    fileDeck += card;
+                }
+                
+                writer.write(fileDeck);
+                writer.newLine();
+                writer.write(currentCard);
+                writer.close();
+                
+                onLogoutHandle.run();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+    	} else {
+    		if(this.playerForRow % 2 == 0) {
+        		onLogoutHandle.run();	
+    		} else {
+    			System.out.println("You have to add another player!");
+    		}
+    	}
     }
 }

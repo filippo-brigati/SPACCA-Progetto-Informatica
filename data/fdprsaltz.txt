@@ -1,6 +1,0 @@
-Filippo,
-Matteo,35
-Luca,653
-Giovanni,1213
-DECK:
-CURRENT:2

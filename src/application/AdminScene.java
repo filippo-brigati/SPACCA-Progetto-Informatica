@@ -5,10 +5,17 @@ import javafx.scene.Scene;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class AdminScene {
     private Runnable onLogoutHandle;
@@ -17,41 +24,41 @@ public class AdminScene {
     private Scene scene;
     
     private boolean isTournament;
+    private ObservableList<String> matchesList = FXCollections.observableArrayList();
 	
 	public AdminScene() {
-        BorderPane root = new BorderPane();
+		this.getMatchFromFile();
 		
-        Scene scene1 = new Scene(root, 900, 600);
-        
-        Button logoutButton = new Button("Logout");
-        logoutButton.setOnAction(event -> onLogoutHandle.run());
-        
-        HBox topLeftBox = new HBox(logoutButton);
-        topLeftBox.setPadding(new Insets(10));
-        root.setLeft(topLeftBox);
+		BorderPane root = new BorderPane();
 
-        Button createTournamentButton = new Button("Create Tournament");
-        createTournamentButton.setOnAction(event -> createGame(true));
-        Button createSimpleMatchButton = new Button("Create Simple Match");
-        createSimpleMatchButton.setOnAction(event -> createGame(false));
-        HBox topRightBox = new HBox(createTournamentButton, createSimpleMatchButton);
-        
-        
-        topRightBox.setSpacing(10);
-        topRightBox.setPadding(new Insets(10));
-        topRightBox.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
-        root.setRight(topRightBox);
+		Scene scene1 = new Scene(root, 900, 600);
 
-        Label registeredMatchesLabel = new Label("Registered Matches");
-        ListView<String> matchesListView = new ListView<>();
-        ObservableList<String> matchesList = FXCollections.observableArrayList();
-        matchesListView.setItems(matchesList);
-        VBox centerBox = new VBox(registeredMatchesLabel, matchesListView);
-        centerBox.setSpacing(10);
-        centerBox.setPadding(new Insets(10));
-        root.setCenter(centerBox);
+		Button logoutButton = new Button("Logout");
+		logoutButton.setOnAction(event -> onLogoutHandle.run());
 
-        this.scene = scene1;
+		Button createTournamentButton = new Button("Create Tournament");
+		createTournamentButton.setOnAction(event -> createGame(true));
+		Button createSimpleMatchButton = new Button("Create Simple Match");
+		createSimpleMatchButton.setOnAction(event -> createGame(false));
+
+		HBox topButtonsBox = new HBox(logoutButton, createTournamentButton, createSimpleMatchButton);
+		topButtonsBox.setSpacing(10);
+		topButtonsBox.setPadding(new Insets(10));
+		topButtonsBox.setAlignment(Pos.TOP_LEFT);
+		root.setTop(topButtonsBox);
+
+		Label registeredMatchesLabel = new Label("Registered Matches");
+		ListView<String> matchesListView = new ListView<>();
+		
+		matchesListView.setItems(this.matchesList);
+		VBox centerBox = new VBox(registeredMatchesLabel, matchesListView);
+		centerBox.setSpacing(10);
+		centerBox.setPadding(new Insets(10));
+		VBox.setVgrow(matchesListView, Priority.ALWAYS);
+		matchesListView.setMaxWidth(Double.MAX_VALUE);
+		root.setCenter(centerBox);
+
+		this.scene = scene1;
 	}
 	
 	public Scene getScene() {
@@ -74,6 +81,21 @@ public class AdminScene {
     	this.isTournament = isTournament;
     	
     	onCreateGameHandle.run();
-    	
+    }
+    
+    public void getMatchFromFile() {
+        String directoryPath = "./data/";
+        
+        try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(directoryPath))) {
+            for (Path file : directoryStream) {
+                String fileName = file.getFileName().toString();
+                if (!fileName.equals("leaderboard.txt") && !fileName.equals(".DS_Store")) {
+                    //System.out.println("Processing file: " + fileName);
+                	this.matchesList.add(fileName.substring(0, fileName.length() - 4));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
