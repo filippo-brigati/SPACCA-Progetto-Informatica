@@ -70,6 +70,7 @@ public class Main extends Application {
     private void createTournamentLobbyView(String gameCode) {
     	TournamentLobby trLobby = new TournamentLobby(gameCode);
     	trLobby.setOnLogoutHandle(() -> switchToLoginView(null));
+    	trLobby.setOnStartGameHandle(() -> switchToGameView(trLobby.getFullChildPath()));
     	
     	primaryStage.setTitle("TOURNAMENT " + gameCode + " - SPACCA");
     	primaryStage.setScene(trLobby.getScene());
