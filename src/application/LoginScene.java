@@ -18,6 +18,7 @@ public class LoginScene {
     private Scene scene;
     private Runnable onLoginSuccess;
     private Runnable onGameStart;
+    private Runnable onTournamentLobby;
     
     private String gameCode;
     
@@ -94,6 +95,10 @@ public class LoginScene {
     public void setOnGameStart(Runnable handler) {
         onGameStart = handler;
     }
+    
+    public void setOnTournamentLobby(Runnable handler) {
+        onTournamentLobby = handler;
+    }
 
     public Scene getScene() {
         return scene;
@@ -104,8 +109,6 @@ public class LoginScene {
     }
 
     private void handleLoginButtonClick(String username, String password) {
-        // Perform login validation
-        // If login is successful, trigger the onLoginSuccess event
         if (onLoginSuccess != null) {
         	if(username.equals(ADMIN_USERNAME) && password.equals(ADMIN_PASSWORD)) {
                 onLoginSuccess.run();
@@ -121,13 +124,15 @@ public class LoginScene {
     	
     	if(file.exists()) {
     		this.gameCode = fileName;
-    		onGameStart.run();
+    		
+    		if(fileName.startsWith("tr-")) {
+    			onTournamentLobby.run();
+    		} else {
+        		onGameStart.run();
+    		}
     	} else {
     		System.out.println("il file" + fileName + " non esiste");
     		fileNotExistLabel.setText("Game code does not exist");
     	}
     }
 }
-
-
-

@@ -22,6 +22,7 @@ public class Main extends Application {
         LoginScene login = new LoginScene(fileCode);
         login.setOnLoginSuccess(() -> switchToHomeView());
         login.setOnGameStart(() -> switchToGameView(login.getGameCode()));
+        login.setOnTournamentLobby(() -> switchToTournamentLobbyView(login.getGameCode()));
 
         // Set the login view as the root of the scene
         primaryStage.setTitle("LOGIN - SPACCA");
@@ -65,6 +66,14 @@ public class Main extends Application {
     	primaryStage.setTitle(title);
     	primaryStage.setScene(gameSetup.getScene());
     }
+    
+    private void createTournamentLobbyView(String gameCode) {
+    	TournamentLobby trLobby = new TournamentLobby(gameCode);
+    	trLobby.setOnLogoutHandle(() -> switchToLoginView(null));
+    	
+    	primaryStage.setTitle("TOURNAMENT " + gameCode + " - SPACCA");
+    	primaryStage.setScene(trLobby.getScene());
+    }
 
     // Method to switch to the home view
     private void switchToHomeView() {
@@ -87,11 +96,12 @@ public class Main extends Application {
     private void switchToGameSetupView(boolean isTournament) {
     	createGameSetupView(isTournament);
     }
+    
+    private void switchToTournamentLobbyView(String gameCode) {
+    	createTournamentLobbyView(gameCode);
+    }
 
     public static void main(String[] args) {
         launch(args);
     }
 }
-
-
-
