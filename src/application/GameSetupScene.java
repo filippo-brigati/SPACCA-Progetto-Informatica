@@ -13,10 +13,10 @@ import java.util.Random;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 public class GameSetupScene {
@@ -36,25 +36,54 @@ public class GameSetupScene {
 		this.interfaceSetup();
 		
         // Create UI components
-        Label titleLabel = new Label(title);
-        titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        //Label titleLabel = new Label(title);
+        //titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
         
-        Button logoutButton = new Button("Logout");
-        logoutButton.setOnAction(event -> onLogoutHandle.run());
+        ImageView titleLabel = new ImageView(new Image(new File(this.title).toURI().toString()));
+        titleLabel.setFitWidth(290);
+        titleLabel.setFitHeight(40);
         
-        Label playerInputLabel = new Label("Enter Player Name:");
+        //Button logoutButton = new Button("Logout");
+        //logoutButton.setOnAction(event -> onLogoutHandle.run());
+        
+        ImageView logoutButton = new ImageView(new Image(new File("./assets/logout.png").toURI().toString()));
+        logoutButton.setFitWidth(90);
+        logoutButton.setFitHeight(50);
+        
+        logoutButton.setOnMouseClicked(event -> onLogoutHandle.run());
+        
+        //Label playerInputLabel = new Label("Enter Player Name:");
+        
+        ImageView playerInputLabel = new ImageView(new Image(new File("./assets/enter_player_name.png").toURI().toString()));
+        playerInputLabel.setFitWidth(280);
+        playerInputLabel.setFitHeight(30);        
+        
         TextField playerInputField = new TextField();
-        Button addButton = new Button("Add Player");
+        
         ListView<String> playerListView = new ListView<>();
         
-        addButton.setOnAction(e -> addPlayer(playerInputField, playerListView));
+        //Button addButton = new Button("Add Player");
+        //addButton.setOnAction(e -> addPlayer(playerInputField, playerListView));
         
-        Button doneButton = new Button("Done");
-        doneButton.setOnAction(event -> this.generateDeckAndUserCard());
+        ImageView addButton = new ImageView(new Image(new File("./assets/add_player.png").toURI().toString()));
+        addButton.setFitWidth(160);
+        addButton.setFitHeight(50);
+        
+        addButton.setOnMouseClicked(e -> addPlayer(playerInputField, playerListView));
+        
+        //Button doneButton = new Button("Done");
+        //doneButton.setOnAction(event -> this.generateDeckAndUserCard());
+        
+        ImageView doneButton = new ImageView(new Image(new File("./assets/create_game.png").toURI().toString()));
+        doneButton.setFitWidth(160);
+        doneButton.setFitHeight(50); 
+        
+        doneButton.setOnMouseClicked(event -> this.generateDeckAndUserCard());
 
         VBox layout = new VBox(20, titleLabel, logoutButton, playerInputLabel, playerInputField, addButton, playerListView, doneButton);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(20));
+        layout.setStyle("-fx-background-color: green;");
 
         this.scene = new Scene(layout, 900, 600);
 	}
@@ -77,9 +106,9 @@ public class GameSetupScene {
     
     public void interfaceSetup() {
     	if(this.isTournament == false) {
-    		title = "CREATE SIMPLE MATCH";
+    		title = "./assets/create_single_game_white.png";
     	} else {
-    		title = "CREATE TOURNAMENT";
+    		title = "./assets/create_tournament_white.png";
     	}
     }
 	

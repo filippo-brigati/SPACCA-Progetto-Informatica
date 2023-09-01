@@ -52,6 +52,7 @@ public class TournamentLobby {
         
         root.setSpacing(10);
         root.setPadding(new Insets(10));
+        root.setStyle("-fx-background-color: green;");
 
         VBox.setVgrow(listView, Priority.ALWAYS);
         listView.setMaxWidth(Double.MAX_VALUE);

@@ -6,7 +6,6 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
@@ -16,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.io.BufferedReader;
@@ -47,7 +47,8 @@ public class GameScene {
     private BorderPane rootPane;
     private Label gameInfoLabel;
     private VBox topPane;
-    private Button logoutButton;
+    //private Button logoutButton;
+    private ImageView logoutImage;
     
     private Runnable onGameWin;
 
@@ -62,16 +63,23 @@ public class GameScene {
         this.setUpGame();
         
         
-        this.logoutButton = new Button("Logout");
-        this.logoutButton.setOnAction(event -> onLogoutHandle.run());
+        //this.logoutButton = new Button("Logout");
+        //this.logoutButton.setOnAction(event -> onLogoutHandle.run());
+        
+        this.logoutImage = new ImageView(new Image(new File("./assets/logout.png").toURI().toString()));
+        this.logoutImage.setFitWidth(90);
+        this.logoutImage.setFitHeight(50);
+        
+        this.logoutImage.setOnMouseClicked(event -> onLogoutHandle.run());
         
         this.gameInfoLabel = new Label("Game Code: " + this.gameCode + " | Current Player: " + this.currentPlayer);
+        this.gameInfoLabel.setTextFill(Color.WHITE);
         this.gameInfoLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         BorderPane.setAlignment(this.gameInfoLabel, Pos.CENTER);
         BorderPane.setMargin(this.gameInfoLabel, new Insets(20, 0, 0, 0));
 
         this.topPane = new VBox(20);
-        this.topPane.getChildren().addAll(this.logoutButton, this.gameInfoLabel);
+        this.topPane.getChildren().addAll(this.logoutImage, this.gameInfoLabel);
         BorderPane.setAlignment(this.topPane, Pos.CENTER);
         this.topPane.setAlignment(Pos.CENTER);
         this.rootPane.setTop(this.topPane);
@@ -100,6 +108,7 @@ public class GameScene {
 
         BorderPane.setMargin(gameInfoLabel, new Insets(0, 0, 0, 20));
         this.rootPane.setBottom(this.bottomImages);
+        this.rootPane.setStyle("-fx-background-color: green;");
 
         Scene scene1 = new Scene(this.rootPane, 900, 600);
 
@@ -179,11 +188,15 @@ public class GameScene {
                 }  	
             }
             
-            this.logoutButton = new Button("Logout");
-            this.logoutButton.setOnAction(event -> onLogoutHandle.run());
+            this.logoutImage = new ImageView(new Image(new File("./assets/logout.png").toURI().toString()));
+            this.logoutImage.setFitWidth(90);
+            this.logoutImage.setFitHeight(50);
+            
+            this.logoutImage.setOnMouseClicked(event -> onLogoutHandle.run());
             
             this.gameInfoLabel = new Label();
             this.gameInfoLabel = new Label("Game Code: " + this.gameCode + " | Current Player: " + this.currentPlayer);
+            this.gameInfoLabel.setTextFill(Color.WHITE);
             this.gameInfoLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
             BorderPane.setAlignment(this.gameInfoLabel, Pos.CENTER);
             BorderPane.setMargin(this.gameInfoLabel, new Insets(20, 0, 0, 0));
@@ -192,7 +205,7 @@ public class GameScene {
             this.rootPane.setBottom(this.bottomImages);
             
             this.topPane = new VBox(20);
-            this.topPane.getChildren().addAll(this.logoutButton, this.gameInfoLabel);
+            this.topPane.getChildren().addAll(this.logoutImage, this.gameInfoLabel);
             BorderPane.setAlignment(this.topPane, Pos.CENTER);
             this.topPane.setAlignment(Pos.CENTER);
             this.rootPane.setTop(this.topPane);

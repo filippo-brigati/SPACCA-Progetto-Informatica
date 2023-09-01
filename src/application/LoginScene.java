@@ -1,16 +1,17 @@
 package application;
 
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
-import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 
 import java.io.File;
 
@@ -22,50 +23,78 @@ public class LoginScene {
     
     private String gameCode;
     
-    private Label errorLabel;
-    private Label fileNotExistLabel;
+    private ImageView errorLabel;
+    private ImageView fileNotExistLabel;
     
     private static final String ADMIN_USERNAME = "admin";
     private static final String ADMIN_PASSWORD = "admin";
 
     public LoginScene(String fileCode) {
         StackPane root = new StackPane();
+        
+        ImageView imageView = new ImageView(new Image(new File("./assets/logo.png").toURI().toString()));
+        imageView.setFitWidth(600);
+        imageView.setFitHeight(300);
 
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setHgap(10);
         gridPane.setVgap(10);
         gridPane.setPadding(new Insets(20));
+        
+        gridPane.setMinWidth(600);
+        gridPane.setPrefWidth(600);
+        gridPane.setMaxWidth(600);
 
-        Text titleLabel = new Text("Login");
-        titleLabel.setStyle("-fx-font-size: 24;");
         TextField usernameField = new TextField();
         usernameField.setPromptText("Username");
+        
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("Password");
-        Button loginButton = new Button("Login");
-        loginButton.setOnAction(event -> handleLoginButtonClick(usernameField.getText(), passwordField.getText()));
         
-        // Create the error label
-        errorLabel = new Label();
-        errorLabel.setTextFill(Color.RED);
+        ImageView loginImage = new ImageView(new Image(new File("./assets/login.png").toURI().toString()));
+        loginImage.setFitWidth(100);
+        loginImage.setFitHeight(50);
         
-        fileNotExistLabel = new Label();
-        fileNotExistLabel.setTextFill(Color.RED);
+        loginImage.setOnMouseClicked(event -> handleLoginButtonClick(usernameField.getText(), passwordField.getText()));
         
-        Text gameCodeLabel = new Text("Enter game code:");
+        HBox hbox = new HBox(20);
+        hbox.setAlignment(Pos.CENTER);
+        hbox.setPrefWidth(600);
+        
+        hbox.getChildren().addAll(usernameField, passwordField);
+        
+        /*
+        this.errorLabel = new ImageView(new Image(new File("").toURI().toString()));
+        this.errorLabel.setFitWidth(100);
+        this.errorLabel.setFitHeight(50);
+        
+        this.fileNotExistLabel = new ImageView(new Image(new File("").toURI().toString()));
+        this.fileNotExistLabel.setFitWidth(100);
+        this.fileNotExistLabel.setFitHeight(50);
+        */
+        
+        this.errorLabel = new ImageView();
+        this.fileNotExistLabel = new ImageView();
         
         TextField gameCodeField = new TextField();
-        Button enterGameButton = new Button("Enter");
-        enterGameButton.setOnAction(event -> checkExistringMatch(gameCodeField.getText()));
-
-        gridPane.add(titleLabel, 0, 0, 2, 1);
-        gridPane.add(usernameField, 0, 1);
-        gridPane.add(passwordField, 0, 2);
-        gridPane.add(loginButton, 0, 3);
-        gridPane.add(errorLabel, 1, 3);
+        gameCodeField.setPrefWidth(600);
         
-        GridPane.setMargin(gameCodeLabel, new Insets(30, 0, 0, 0));
+        //Button enterGameButton = new Button("");
+        ImageView buttonImage = new ImageView(new Image(new File("./assets/play.png").toURI().toString()));
+        buttonImage.setFitWidth(100);
+        buttonImage.setFitHeight(50);
+        
+        buttonImage.setOnMouseClicked(event -> checkExistringMatch(gameCodeField.getText()));
+        
+        //enterGameButton.setGraphic(buttonImage);
+        //enterGameButton.setOnAction(event -> checkExistringMatch(gameCodeField.getText()));
+        
+        VBox vbox = new VBox(20);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.getChildren().addAll(imageView, gameCodeField, buttonImage, hbox, loginImage, this.errorLabel, this.fileNotExistLabel);
+        
+        gridPane.add(vbox, 0, 0);
         
         Text codeLabel = new Text("Game code: " + fileCode);
         
@@ -73,15 +102,10 @@ public class LoginScene {
         	gridPane.add(codeLabel, 0, 4);
         }
         
-        gridPane.add(gameCodeLabel, 0, 4);
-        gridPane.add(gameCodeField, 0, 5);
-        gridPane.add(enterGameButton, 1, 5);
-        
-        
-        
         gridPane.add(fileNotExistLabel, 1, 3);
 
         root.getChildren().add(gridPane);
+        root.setStyle("-fx-background-color: green;");
 
         Scene scene1 = new Scene(root, 900, 600);
 
@@ -114,7 +138,10 @@ public class LoginScene {
                 onLoginSuccess.run();
         	} else {
         		System.out.println("non sei un admin");
-        		errorLabel.setText("Invalid username or password!");
+        		
+                this.errorLabel = new ImageView(new Image(new File("./assets/wrong_credential.png").toURI().toString()));
+                this.errorLabel.setFitWidth(100);
+                this.errorLabel.setFitHeight(50);
         	}
         }
     }
@@ -132,7 +159,10 @@ public class LoginScene {
     		}
     	} else {
     		System.out.println("il file" + fileName + " non esiste");
-    		fileNotExistLabel.setText("Game code does not exist");
+    		
+            this.fileNotExistLabel = new ImageView(new Image(new File("./assets/game_not_found.png").toURI().toString()));
+            this.fileNotExistLabel.setFitWidth(100);
+            this.fileNotExistLabel.setFitHeight(50);
     	}
     }
 }

@@ -41,6 +41,7 @@ public class WinnerScene {
         this.gridPane.add(imageView, 0, 0, 2, 1);
 
         root.getChildren().add(this.gridPane);
+        root.setStyle("-fx-background-color: green;");
 
         Scene scene1 = new Scene(root, 900, 600);
 

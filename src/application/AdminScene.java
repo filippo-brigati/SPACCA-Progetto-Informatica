@@ -7,11 +7,14 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
+import java.io.File;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,21 +36,45 @@ public class AdminScene {
 
 		Scene scene1 = new Scene(root, 900, 600);
 
-		Button logoutButton = new Button("Logout");
-		logoutButton.setOnAction(event -> onLogoutHandle.run());
+		//Button logoutButton = new Button("Logout");
+		//logoutButton.setOnAction(event -> onLogoutHandle.run());
+		
+        ImageView logoutImage = new ImageView(new Image(new File("./assets/logout.png").toURI().toString()));
+        logoutImage.setFitWidth(90);
+        logoutImage.setFitHeight(50);
+        
+        logoutImage.setOnMouseClicked(event -> onLogoutHandle.run());
 
-		Button createTournamentButton = new Button("Create Tournament");
-		createTournamentButton.setOnAction(event -> createGame(true));
-		Button createSimpleMatchButton = new Button("Create Simple Match");
-		createSimpleMatchButton.setOnAction(event -> createGame(false));
+		//Button createTournamentButton = new Button("Create Tournament");
+		//createTournamentButton.setOnAction(event -> createGame(true));
+		
+        ImageView createTournamentImage = new ImageView(new Image(new File("./assets/create_tournament.png").toURI().toString()));
+        createTournamentImage.setFitWidth(290);
+        createTournamentImage.setFitHeight(50);
+        
+        createTournamentImage.setOnMouseClicked(event -> createGame(true));
+		
+		//Button createSimpleMatchButton = new Button("Create Simple Match");
+		//createSimpleMatchButton.setOnAction(event -> createGame(false));
+		
+        ImageView createSingleMatchImage = new ImageView(new Image(new File("./assets/create_single_game.png").toURI().toString()));
+        createSingleMatchImage.setFitWidth(290);
+        createSingleMatchImage.setFitHeight(50);
+        
+        createSingleMatchImage.setOnMouseClicked(event -> createGame(false));
 
-		HBox topButtonsBox = new HBox(logoutButton, createTournamentButton, createSimpleMatchButton);
+		HBox topButtonsBox = new HBox(logoutImage, createTournamentImage, createSingleMatchImage);
 		topButtonsBox.setSpacing(10);
 		topButtonsBox.setPadding(new Insets(10));
 		topButtonsBox.setAlignment(Pos.TOP_LEFT);
 		root.setTop(topButtonsBox);
 
-		Label registeredMatchesLabel = new Label("Registered Matches");
+		//Label registeredMatchesLabel = new Label("Registered Matches");
+		
+        ImageView registeredMatchesLabel = new ImageView(new Image(new File("./assets/registered_match.png").toURI().toString()));
+        registeredMatchesLabel.setFitWidth(350);
+        registeredMatchesLabel.setFitHeight(50);
+		
 		ListView<String> matchesListView = new ListView<>();
 		
 		matchesListView.setItems(this.matchesList);
@@ -57,6 +84,7 @@ public class AdminScene {
 		VBox.setVgrow(matchesListView, Priority.ALWAYS);
 		matchesListView.setMaxWidth(Double.MAX_VALUE);
 		root.setCenter(centerBox);
+		root.setStyle("-fx-background-color: green;");
 
 		this.scene = scene1;
 	}
