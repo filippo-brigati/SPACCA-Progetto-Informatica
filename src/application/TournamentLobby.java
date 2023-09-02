@@ -9,17 +9,21 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+import javafx.scene.paint.Color;
 
 public class TournamentLobby {
     private Scene scene;
@@ -36,11 +40,18 @@ public class TournamentLobby {
         root.setSpacing(10);
         root.setAlignment(Pos.CENTER);
         
-		Button logoutButton = new Button("Logout");
-		logoutButton.setOnAction(event -> onLogoutHandle.run());
+		//Button logoutButton = new Button("Logout");
+		//logoutButton.setOnAction(event -> onLogoutHandle.run());
+        
+        ImageView logoutButton = new ImageView(new Image(new File("./assets/logout.png").toURI().toString()));
+        logoutButton.setFitWidth(90);
+        logoutButton.setFitHeight(50);
+        
+        logoutButton.setOnMouseClicked(event -> onLogoutHandle.run());
 
         Label titleLabel = new Label("Tournament: " + this.gameCode);
-        titleLabel.setStyle("-fx-font-size: 24px;");
+        titleLabel.setTextFill(Color.WHITE);
+        titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
         ObservableList<String> matchList = readMatchesFromFile("./data/" + this.gameCode + ".txt");
         
@@ -81,7 +92,7 @@ public class TournamentLobby {
         ObservableList<String> notMatchedUser = FXCollections.observableArrayList();
         
         ObservableList<String> newFileLine = FXCollections.observableArrayList();
-
+        
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -134,7 +145,6 @@ public class TournamentLobby {
         return matchList;
     }
 
-    // Create a custom cell for the ListView
     private ListCell<String> createMatchCell() {
         return new ListCell<>() {
             private final Button playButton = new Button("Play");

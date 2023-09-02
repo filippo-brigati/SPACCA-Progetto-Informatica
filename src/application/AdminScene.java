@@ -78,6 +78,8 @@ public class AdminScene {
 		ListView<String> matchesListView = new ListView<>();
 		
 		matchesListView.setItems(this.matchesList);
+		matchesListView.setCellFactory(param -> createMatchCell());
+		
 		VBox centerBox = new VBox(registeredMatchesLabel, matchesListView);
 		centerBox.setSpacing(10);
 		centerBox.setPadding(new Insets(10));
@@ -125,5 +127,43 @@ public class AdminScene {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    // Create a custom cell for the ListView
+    private ListCell<String> createMatchCell() {
+        return new ListCell<>() {
+            private final Button deleteButton = new Button("DELETE");
+
+            {
+            	deleteButton.setOnAction(event -> {
+            		String file = getItem();
+            		
+        	        File fileToDelete = new File("./data/" + file + ".txt");
+
+        	        if (fileToDelete.exists()) {
+        	            if (fileToDelete.delete()) {
+        	                System.out.println("File deleted successfully.");
+        	                
+        	                matchesList.remove(file);
+        	            } else {
+        	                System.err.println("Failed to delete the file.");
+        	            }
+        	        } else {
+        	            System.err.println("File does not exist.");
+        	        }
+                });
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(item);
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(deleteButton);
+                }
+            }
+        };
     }
 }
