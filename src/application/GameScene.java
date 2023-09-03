@@ -309,14 +309,27 @@ public class GameScene {
 	        
 	        writer.close();
 	        
-	        if(this.currentPlayerIndex < this.playerArray.size() - 1) {
-	        	this.currentPlayerIndex = this.currentPlayerIndex + 1;
-	        } else {
-	        	this.currentPlayerIndex = 0;
-	        }
+            if(this.gameCard.toString().contains("9")) {
+		        if(this.currentPlayerIndex < this.playerArray.size() - 2) {
+		        	this.currentPlayerIndex = this.currentPlayerIndex + 2;
+		        } else {
+		        	this.currentPlayerIndex = 0;
+		        }
+		        
+		        System.out.println("CURRENT INDEX: " + this.currentPlayerIndex);
+		        
+		        this.currentPlayer = this.playerArray.get(this.currentPlayerIndex);
+            } else {
+		        if(this.currentPlayerIndex < this.playerArray.size() - 1) {
+		        	this.currentPlayerIndex = this.currentPlayerIndex + 1;
+		        } else {
+		        	this.currentPlayerIndex = 0;
+		        }
+		        
+		        this.currentPlayer = this.playerArray.get(this.currentPlayerIndex);
+            }
 	        
 	        System.out.println(this.currentPlayerIndex + " ---- " + this.playerArray.get(this.currentPlayerIndex));
-	        this.currentPlayer = this.playerArray.get(this.currentPlayerIndex);
 	        this.getPlayerCard();
 	        
 	        
@@ -333,6 +346,8 @@ public class GameScene {
 			valid = Integer.parseInt(this.gameCard) + 1;
 		}
 		if(this.gameCard.contains("9")) { valid = card; }
+		if(this.gameCard.contains("7")) { valid = card; }
+		if(this.gameCard.contains("8")) { valid = card; }
 		
 		if(this.gameCard.equals("back") || card == valid) {
 			this.gameCard = card.toString();
@@ -408,14 +423,26 @@ public class GameScene {
 	            }
 	            
 	            writer.close();
-	           
-		        if(this.currentPlayerIndex < this.playerArray.size() - 1) {
-		        	this.currentPlayerIndex = this.currentPlayerIndex + 1;
-		        } else {
-		        	this.currentPlayerIndex = 0;
-		        }
-		        
-		        this.currentPlayer = this.playerArray.get(this.currentPlayerIndex);
+	            
+	            if(card.toString().contains("9")) {
+			        if(this.currentPlayerIndex < this.playerArray.size() - 2) {
+			        	this.currentPlayerIndex = this.currentPlayerIndex + 2;
+			        } else {
+			        	this.currentPlayerIndex = 0;
+			        }
+			        
+			        System.out.println("CURRENT INDEX: " + this.currentPlayerIndex);
+			        
+			        this.currentPlayer = this.playerArray.get(this.currentPlayerIndex);
+	            } else {
+			        if(this.currentPlayerIndex < this.playerArray.size() - 1) {
+			        	this.currentPlayerIndex = this.currentPlayerIndex + 1;
+			        } else {
+			        	this.currentPlayerIndex = 0;
+			        }
+			        
+			        this.currentPlayer = this.playerArray.get(this.currentPlayerIndex);
+	            }
 		        this.getPlayerCard();
 	        } catch (IOException e) {
 	            e.printStackTrace();
@@ -502,14 +529,26 @@ public class GameScene {
 		            }
 		            
 		            writer.close();
-		           
-			        if(this.currentPlayerIndex < this.playerArray.size() - 1) {
-			        	this.currentPlayerIndex = this.currentPlayerIndex + 1;
-			        } else {
-			        	this.currentPlayerIndex = 0;
-			        }
-			        
-			        this.currentPlayer = this.playerArray.get(this.currentPlayerIndex);
+		            
+		            if(this.gameCard.toString().contains("9")) {
+				        if(this.currentPlayerIndex < this.playerArray.size() - 2) {
+				        	this.currentPlayerIndex = this.currentPlayerIndex + 2;
+				        } else {
+				        	this.currentPlayerIndex = 0;
+				        }
+				        
+				        System.out.println("CURRENT INDEX: " + this.currentPlayerIndex);
+				        
+				        this.currentPlayer = this.playerArray.get(this.currentPlayerIndex);
+		            } else {
+				        if(this.currentPlayerIndex < this.playerArray.size() - 1) {
+				        	this.currentPlayerIndex = this.currentPlayerIndex + 1;
+				        } else {
+				        	this.currentPlayerIndex = 0;
+				        }
+				        
+				        this.currentPlayer = this.playerArray.get(this.currentPlayerIndex);
+		            }
 			        this.getPlayerCard();
 		        } catch (IOException e) {
 		            e.printStackTrace();
