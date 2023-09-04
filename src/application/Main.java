@@ -77,6 +77,20 @@ public class Main extends Application {
     	primaryStage.setTitle("TOURNAMENT " + gameCode + " - SPACCA");
     	primaryStage.setScene(trLobby.getScene());
     }
+    
+    private void createLeaderboardView() {
+    	LeaderboardScene lead = new LeaderboardScene();
+    	
+    	primaryStage.setTitle("LEADERBOARD - SPACCA");
+    	primaryStage.setScene(lead.getScene());
+    }
+    
+    private void createInstructionView() {
+    	InstructionScene instruction = new InstructionScene();
+    	
+    	primaryStage.setTitle("INSTRUCTIONS - SPACCA");
+    	primaryStage.setScene(instruction.getScene());
+    }
 
     // Method to switch to the home view
     private void switchToHomeView() {
@@ -102,6 +116,14 @@ public class Main extends Application {
     
     private void switchToTournamentLobbyView(String gameCode) {
     	createTournamentLobbyView(gameCode);
+    }
+    
+    private void switchToLeaderBoardView() {
+    	createLeaderboardView();
+    }
+    
+    private void switchToInstructionView() {
+    	createInstructionView();
     }
 
     public static void main(String[] args) {

@@ -110,7 +110,7 @@ public class GameScene {
         this.rootPane.setBottom(this.bottomImages);
         this.rootPane.setStyle("-fx-background-color: green;");
 
-        Scene scene1 = new Scene(this.rootPane, 900, 600);
+        Scene scene1 = new Scene(this.rootPane, 1100, 700);
 
         this.scene = scene1;
     }
@@ -220,10 +220,9 @@ public class GameScene {
                     });
                 };
 
-                int timeoutInSeconds = 2; // Timeout duration in seconds
+                int timeoutInSeconds = 2;
                 executorService.schedule(task, timeoutInSeconds, TimeUnit.SECONDS);
                 
-                // Don't forget to shut down the executor when done
                 executorService.shutdown();
             	
             }
@@ -468,7 +467,7 @@ public class GameScene {
 		String fileName = "./data/" + this.gameCode + ".txt";
 		boolean found = false;
 		
-		if(this.gameCard.startsWith("back")) {
+		if(this.gameCard.startsWith("back") || this.gameCard.startsWith("8") || this.gameCard.startsWith("9")) {
 			Integer flag = this.playerCardArray.get(0);
 			
 			this.gameCard = flag.toString();

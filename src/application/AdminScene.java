@@ -34,7 +34,7 @@ public class AdminScene {
 		
 		BorderPane root = new BorderPane();
 
-		Scene scene1 = new Scene(root, 900, 600);
+		Scene scene1 = new Scene(root, 1100, 700);
 
 		//Button logoutButton = new Button("Logout");
 		//logoutButton.setOnAction(event -> onLogoutHandle.run());

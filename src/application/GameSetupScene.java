@@ -85,7 +85,7 @@ public class GameSetupScene {
         layout.setPadding(new Insets(20));
         layout.setStyle("-fx-background-color: green;");
 
-        this.scene = new Scene(layout, 900, 600);
+        this.scene = new Scene(layout, 1100, 700);
 	}
 	
 	public Scene getScene() {

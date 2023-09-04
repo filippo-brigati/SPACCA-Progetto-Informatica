@@ -68,7 +68,7 @@ public class TournamentLobby {
         VBox.setVgrow(listView, Priority.ALWAYS);
         listView.setMaxWidth(Double.MAX_VALUE);
 
-        this.scene = new Scene(root, 900, 600);
+        this.scene = new Scene(root, 1100, 700);
     }
 
     public Scene getScene() {

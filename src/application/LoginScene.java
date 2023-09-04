@@ -1,6 +1,7 @@
 package application;
 
 import javafx.scene.Scene;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.PasswordField;
@@ -8,12 +9,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 import java.io.File;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class LoginScene {
     private Scene scene;
@@ -23,8 +29,10 @@ public class LoginScene {
     
     private String gameCode;
     
-    private ImageView errorLabel;
-    private ImageView fileNotExistLabel;
+    private Label errorLabel;
+    private Label fileNotExistLabel;
+    
+    private GridPane gridPane = new GridPane();
     
     private static final String ADMIN_USERNAME = "admin";
     private static final String ADMIN_PASSWORD = "admin";
@@ -36,15 +44,15 @@ public class LoginScene {
         imageView.setFitWidth(600);
         imageView.setFitHeight(300);
 
-        GridPane gridPane = new GridPane();
-        gridPane.setAlignment(Pos.CENTER);
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
-        gridPane.setPadding(new Insets(20));
         
-        gridPane.setMinWidth(600);
-        gridPane.setPrefWidth(600);
-        gridPane.setMaxWidth(600);
+        this.gridPane.setAlignment(Pos.CENTER);
+        this.gridPane.setHgap(10);
+        this.gridPane.setVgap(10);
+        this.gridPane.setPadding(new Insets(20));
+        
+        this.gridPane.setMinWidth(600);
+        this.gridPane.setPrefWidth(600);
+        this.gridPane.setMaxWidth(600);
 
         TextField usernameField = new TextField();
         usernameField.setPromptText("Username");
@@ -64,50 +72,56 @@ public class LoginScene {
         
         hbox.getChildren().addAll(usernameField, passwordField);
         
-        /*
-        this.errorLabel = new ImageView(new Image(new File("").toURI().toString()));
-        this.errorLabel.setFitWidth(100);
-        this.errorLabel.setFitHeight(50);
+        errorLabel = new Label();
+        errorLabel.setTextFill(Color.RED);
         
-        this.fileNotExistLabel = new ImageView(new Image(new File("").toURI().toString()));
-        this.fileNotExistLabel.setFitWidth(100);
-        this.fileNotExistLabel.setFitHeight(50);
-        */
-        
-        this.errorLabel = new ImageView();
-        this.fileNotExistLabel = new ImageView();
+        fileNotExistLabel = new Label();
+        fileNotExistLabel.setTextFill(Color.RED);
         
         TextField gameCodeField = new TextField();
+        if(fileCode != null) { gameCodeField.setPromptText(fileCode); }
         gameCodeField.setPrefWidth(600);
         
-        //Button enterGameButton = new Button("");
         ImageView buttonImage = new ImageView(new Image(new File("./assets/play.png").toURI().toString()));
         buttonImage.setFitWidth(100);
         buttonImage.setFitHeight(50);
         
         buttonImage.setOnMouseClicked(event -> checkExistringMatch(gameCodeField.getText()));
         
-        //enterGameButton.setGraphic(buttonImage);
-        //enterGameButton.setOnAction(event -> checkExistringMatch(gameCodeField.getText()));
+        ImageView leaderBoardImage = new ImageView(new Image(new File("./assets/login.png").toURI().toString()));
+        leaderBoardImage.setFitWidth(100);
+        leaderBoardImage.setFitHeight(50);
+        
+        ImageView instructionImage = new ImageView(new Image(new File("./assets/info.png").toURI().toString()));
+        instructionImage.setFitWidth(50);
+        instructionImage.setFitHeight(50); 
+        
+        HBox image = new HBox(10);
+        image.setAlignment(Pos.CENTER_RIGHT);
+        image.setPrefWidth(600);
+        
+        image.getChildren().addAll(leaderBoardImage, instructionImage);
         
         VBox vbox = new VBox(20);
         vbox.setAlignment(Pos.CENTER);
-        vbox.getChildren().addAll(imageView, gameCodeField, buttonImage, hbox, loginImage, this.errorLabel, this.fileNotExistLabel);
+        vbox.getChildren().addAll(image, imageView, gameCodeField, buttonImage, hbox, loginImage);
         
-        gridPane.add(vbox, 0, 0);
+        this.gridPane.add(vbox, 0, 0);
+        this.gridPane.add(fileNotExistLabel, 0, 1);
+        this.gridPane.add(this.errorLabel, 0, 2);
         
+        /*
         Text codeLabel = new Text("Game code: " + fileCode);
         
         if(fileCode != null) {
         	gridPane.add(codeLabel, 0, 4);
         }
-        
-        gridPane.add(fileNotExistLabel, 1, 3);
+        */
 
-        root.getChildren().add(gridPane);
+        root.getChildren().add(this.gridPane);
         root.setStyle("-fx-background-color: green;");
 
-        Scene scene1 = new Scene(root, 900, 600);
+        Scene scene1 = new Scene(root, 1100, 700);
 
         this.scene = scene1;
     }
@@ -139,9 +153,8 @@ public class LoginScene {
         	} else {
         		System.out.println("non sei un admin");
         		
-                this.errorLabel = new ImageView(new Image(new File("./assets/wrong_credential.png").toURI().toString()));
-                this.errorLabel.setFitWidth(100);
-                this.errorLabel.setFitHeight(50);
+                this.errorLabel.setText("Invalid username or password!");
+                this.errorLabel.setFont(new Font(18));
         	}
         }
     }
@@ -160,9 +173,26 @@ public class LoginScene {
     	} else {
     		System.out.println("il file" + fileName + " non esiste");
     		
-            this.fileNotExistLabel = new ImageView(new Image(new File("./assets/game_not_found.png").toURI().toString()));
-            this.fileNotExistLabel.setFitWidth(100);
-            this.fileNotExistLabel.setFitHeight(50);
+            this.fileNotExistLabel.setText("Game code does not exist");
+            this.fileNotExistLabel.setFont(new Font(18));
     	}
+    	
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+        
+        Runnable task = () -> {
+            Platform.runLater(() -> {
+                setToEmptyLabel();
+            });
+        };
+
+        int timeoutInSeconds = 2;
+        executorService.schedule(task, timeoutInSeconds, TimeUnit.SECONDS);
+        
+        executorService.shutdown();
+    }
+    
+    private void setToEmptyLabel() {
+    	this.fileNotExistLabel.setText("");
+    	this.errorLabel.setText("");
     }
 }
