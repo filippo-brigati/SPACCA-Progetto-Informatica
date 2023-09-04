@@ -1,4 +1,5 @@
-Marta, 100
-Chiara, 450
-Paolo, 200
-Filippo, 650
+Filippo,750
+Chiara,450
+Paolo,200
+Marta,100
+CiaoBOT,50

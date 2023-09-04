@@ -23,6 +23,9 @@ public class Main extends Application {
         login.setOnLoginSuccess(() -> switchToHomeView());
         login.setOnGameStart(() -> switchToGameView(login.getGameCode()));
         login.setOnTournamentLobby(() -> switchToTournamentLobbyView(login.getGameCode()));
+        login.setOnInstruction(() -> switchToInstructionView());
+        login.setOnLeaderBoard(() -> switchToLeaderBoardView());
+        
 
         // Set the login view as the root of the scene
         primaryStage.setTitle("LOGIN - SPACCA");
@@ -80,6 +83,7 @@ public class Main extends Application {
     
     private void createLeaderboardView() {
     	LeaderboardScene lead = new LeaderboardScene();
+    	lead.setOnLogoutHandle(() -> switchToLoginView(null));
     	
     	primaryStage.setTitle("LEADERBOARD - SPACCA");
     	primaryStage.setScene(lead.getScene());
@@ -87,6 +91,7 @@ public class Main extends Application {
     
     private void createInstructionView() {
     	InstructionScene instruction = new InstructionScene();
+    	instruction.setOnGoBackHomeHandler(() -> switchToLoginView(null));
     	
     	primaryStage.setTitle("INSTRUCTIONS - SPACCA");
     	primaryStage.setScene(instruction.getScene());

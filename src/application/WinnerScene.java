@@ -244,5 +244,57 @@ public class WinnerScene {
                 e.printStackTrace();
             }
         }
+        
+        this.updateLeaderBoardData(playerScores);
+    }
+    
+    public void updateLeaderBoardData(Map<String, Integer> player) {
+        Map<String, Integer> dataMap = new HashMap<>();
+
+        try (Scanner scanner = new Scanner(new File("./data/leaderboard.txt"))) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split(",");
+                if (parts.length == 2) {
+                    String name = parts[0].trim();
+                    int value = Integer.parseInt(parts[1].trim());
+                    dataMap.put(name, value);
+                }
+            }
+            
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        
+        Map<String, Integer> mergedMap = new HashMap<>(player);
+
+        // Iterate through newDataMap and merge the data
+        for (Map.Entry<String, Integer> entry : dataMap.entrySet()) {
+            String username = entry.getKey();
+            Integer score = entry.getValue();
+
+            if (mergedMap.containsKey(username)) {
+                int existingScore = mergedMap.get(username);
+                mergedMap.put(username, existingScore + score);
+            } else {
+                mergedMap.put(username, score);
+            }
+        }
+        
+        List<Map.Entry<String, Integer>> sortedEntries = new ArrayList<>(mergedMap.entrySet());
+        sortedEntries.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+        
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("./data/leaderboard.txt"))) {
+            for (Map.Entry<String, Integer> entry : sortedEntries) {
+                String line = entry.getKey() + "," + entry.getValue();
+                writer.write(line);
+                writer.newLine();
+            }
+            
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

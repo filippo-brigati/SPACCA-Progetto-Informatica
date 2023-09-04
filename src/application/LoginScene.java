@@ -23,9 +23,12 @@ import java.util.concurrent.TimeUnit;
 
 public class LoginScene {
     private Scene scene;
+    
     private Runnable onLoginSuccess;
     private Runnable onGameStart;
     private Runnable onTournamentLobby;
+    private Runnable onInstruction;
+    private Runnable onLeaderBoard;
     
     private String gameCode;
     
@@ -88,13 +91,17 @@ public class LoginScene {
         
         buttonImage.setOnMouseClicked(event -> checkExistringMatch(gameCodeField.getText()));
         
-        ImageView leaderBoardImage = new ImageView(new Image(new File("./assets/login.png").toURI().toString()));
-        leaderBoardImage.setFitWidth(100);
+        ImageView leaderBoardImage = new ImageView(new Image(new File("./assets/leaderboard.png").toURI().toString()));
+        leaderBoardImage.setFitWidth(50);
         leaderBoardImage.setFitHeight(50);
+        
+        leaderBoardImage.setOnMouseClicked(event -> onLeaderBoard.run());
         
         ImageView instructionImage = new ImageView(new Image(new File("./assets/info.png").toURI().toString()));
         instructionImage.setFitWidth(50);
         instructionImage.setFitHeight(50); 
+        
+        instructionImage.setOnMouseClicked(event -> onInstruction.run());
         
         HBox image = new HBox(10);
         image.setAlignment(Pos.CENTER_RIGHT);
@@ -136,6 +143,14 @@ public class LoginScene {
     
     public void setOnTournamentLobby(Runnable handler) {
         onTournamentLobby = handler;
+    }
+    
+    public void setOnInstruction(Runnable handler) {
+    	onInstruction = handler;
+    }
+    
+    public void setOnLeaderBoard(Runnable handler) {
+    	onLeaderBoard = handler;
     }
 
     public Scene getScene() {
