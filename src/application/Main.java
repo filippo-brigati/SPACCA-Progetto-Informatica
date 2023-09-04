@@ -50,6 +50,8 @@ public class Main extends Application {
     
     private void createWinView(String gameCode) {
     	WinnerScene winner = new WinnerScene(gameCode);
+    	winner.setOnBackHandle(() -> switchToTournamentLobbyView(winner.getMainFilePath()));
+    	winner.setOnHomeHandle(() -> switchToLoginView(null));
     	
     	primaryStage.setTitle("GAME WINNER - SPACCA");
     	primaryStage.setScene(winner.getScene());

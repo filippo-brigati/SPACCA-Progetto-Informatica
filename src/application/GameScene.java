@@ -312,8 +312,10 @@ public class GameScene {
             if(this.gameCard.toString().contains("9")) {
 		        if(this.currentPlayerIndex < this.playerArray.size() - 2) {
 		        	this.currentPlayerIndex = this.currentPlayerIndex + 2;
-		        } else {
+		        } else if(this.currentPlayerIndex == this.playerArray.size() - 2) {
 		        	this.currentPlayerIndex = 0;
+		        } else {
+		        	this.currentPlayerIndex = 1;
 		        }
 		        
 		        System.out.println("CURRENT INDEX: " + this.currentPlayerIndex);
@@ -345,12 +347,19 @@ public class GameScene {
 		if(!this.gameCard.startsWith("back")) {
 			valid = Integer.parseInt(this.gameCard) + 1;
 		}
-		if(this.gameCard.contains("9")) { valid = card; }
-		if(this.gameCard.contains("7")) { valid = card; }
-		if(this.gameCard.contains("8")) { valid = card; }
+		if(this.gameCard.startsWith("7")) { valid = 1; }
+		
+		if(card.toString().startsWith("9")) { valid = card; }
+		if(card.toString().startsWith("8")) { valid = card; }
+		
+		if(this.gameCard.startsWith("9")) { valid = card; }
+		if(this.gameCard.startsWith("8")) { valid = card; }
+		
+		System.out.println("current card: " + this.gameCard + " inserita: " + card + " valida: " + valid);
 		
 		if(this.gameCard.equals("back") || card == valid) {
 			this.gameCard = card.toString();
+			System.out.println("89: " + this.gameCard);
 			this.gameImage.setImage(new Image(new File("./assets/" + this.gameCard + ".png").toURI().toString()));
 			
 			this.bottomImages.getChildren().clear();
@@ -371,6 +380,7 @@ public class GameScene {
 	        
 			if(this.playerCardArray.size() == 0) {
 				onGameWin.run();
+				return;
 			}
 	        
 	        this.removeCardFromFile(card);
@@ -427,8 +437,10 @@ public class GameScene {
 	            if(card.toString().contains("9")) {
 			        if(this.currentPlayerIndex < this.playerArray.size() - 2) {
 			        	this.currentPlayerIndex = this.currentPlayerIndex + 2;
-			        } else {
+			        } else if(this.currentPlayerIndex == this.playerArray.size() - 2) {
 			        	this.currentPlayerIndex = 0;
+			        } else {
+			        	this.currentPlayerIndex = 1;
 			        }
 			        
 			        System.out.println("CURRENT INDEX: " + this.currentPlayerIndex);
@@ -533,8 +545,10 @@ public class GameScene {
 		            if(this.gameCard.toString().contains("9")) {
 				        if(this.currentPlayerIndex < this.playerArray.size() - 2) {
 				        	this.currentPlayerIndex = this.currentPlayerIndex + 2;
-				        } else {
+				        } else if(this.currentPlayerIndex == this.playerArray.size() - 2) {
 				        	this.currentPlayerIndex = 0;
+				        } else {
+				        	this.currentPlayerIndex = 1;
 				        }
 				        
 				        System.out.println("CURRENT INDEX: " + this.currentPlayerIndex);
