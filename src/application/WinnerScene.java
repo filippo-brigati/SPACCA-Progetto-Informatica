@@ -3,8 +3,8 @@ package application;
 import javafx.scene.Scene;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.HPos;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -20,10 +20,11 @@ import java.util.Map;
 public class WinnerScene {
     private Scene scene;
     private String gameCode;
-    private GridPane gridPane = new GridPane();
+    private VBox vbox = new VBox();
     
     private Runnable onBackHandle;
     private Runnable onHomeHandle;
+    private Runnable onLeaderboardHandle;
     
     private String mainFilePath = "";
     
@@ -39,13 +40,11 @@ public class WinnerScene {
         imageView.setFitWidth(500);
         imageView.setFitHeight(300);
         
-        this.gridPane.add(imageView, 0, 0, 2, 1);
-        this.gridPane.setAlignment(Pos.CENTER);
-        this.gridPane.setHgap(10);
-        this.gridPane.setVgap(10);
-        this.gridPane.setPadding(new Insets(20));
+        this.vbox.getChildren().add(imageView);
+        this.vbox.setAlignment(Pos.CENTER);
+        this.vbox.setPadding(new Insets(20));
 
-        root.getChildren().add(this.gridPane);
+        root.getChildren().add(this.vbox);
         root.setStyle("-fx-background-color: green;");
 
         Scene scene1 = new Scene(root, 1100, 700);
@@ -170,8 +169,10 @@ public class WinnerScene {
                     userLabel.setAlignment(Pos.CENTER);
                     userLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
                 	
-                    this.gridPane.add(userLabel, 0, 1);
-                    this.gridPane.add(imageView, 0, 2);
+                    this.vbox.getChildren().addAll(imageView, userLabel);
+                    
+                    this.vbox.setPrefWidth(1100);
+                    this.vbox.setAlignment(Pos.CENTER);
                     
                     this.deleteTournamentFiles();
                 } else {
@@ -180,14 +181,22 @@ public class WinnerScene {
                     imageView.setFitHeight(40);
                     
                     imageView.setOnMouseClicked(event -> onBackHandle.run());
+                    
+                	ImageView leaderboardImage = new ImageView(new Image(new File("./assets/leaderboard.png").toURI().toString()));
+                	leaderboardImage.setFitWidth(120);
+                	leaderboardImage.setFitHeight(40);
+                    
+                	leaderboardImage.setOnMouseClicked(event -> onLeaderboardHandle.run());
                 	
                 	Label userLabel = new Label(winnerUsername + " WON THE MATCH!");
                     userLabel.setTextFill(Color.WHITE);
                     userLabel.setAlignment(Pos.CENTER);
                     userLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
                 	
-                    this.gridPane.add(userLabel, 0, 1);
-                    this.gridPane.add(imageView, 0, 2);
+                    HBox hbox = new HBox();
+                    hbox.getChildren().addAll(imageView, leaderboardImage);
+                    
+                    this.vbox.getChildren().addAll(hbox, userLabel);
                 }
                 
                 bw.close();
@@ -229,15 +238,11 @@ public class WinnerScene {
                             userLabel.setAlignment(Pos.CENTER);
                             userLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
                         	
-                            this.gridPane.add(userLabel, 0, rowIndex);
-                            this.gridPane.add(imageView, 0, rowIndex + 1);
-                            this.gridPane.setAlignment(Pos.CENTER);
-                            this.gridPane.setHgap(10);
-                            this.gridPane.setVgap(10);
-                            this.gridPane.setPadding(new Insets(10));
+                            this.vbox.getChildren().addAll(imageView, userLabel);
+                            this.vbox.setAlignment(Pos.CENTER);
+                            this.vbox.setPadding(new Insets(10));
                             
-                            GridPane.setHalignment(userLabel, HPos.CENTER);
-                            GridPane.setHalignment(imageView, HPos.CENTER);
+                            this.vbox.setPrefWidth(1100);
                         }
                         this.playerScores.put(username, score);
 
@@ -270,12 +275,11 @@ public class WinnerScene {
                     userLabel.setAlignment(Pos.CENTER);
                     userLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
                 	
-                    this.gridPane.add(userLabel, 0, rowIndex);
-                    this.gridPane.add(imageView, 0, rowIndex + 1);
-                    this.gridPane.setAlignment(Pos.CENTER);
-                    this.gridPane.setHgap(10);
-                    this.gridPane.setVgap(10);
-                    this.gridPane.setPadding(new Insets(10));
+                    this.vbox.getChildren().addAll(imageView, userLabel);
+                    this.vbox.setPadding(new Insets(10));
+                    
+                    this.vbox.setAlignment(Pos.CENTER);
+                    this.vbox.setPrefWidth(1100);
                 }
                 
                 this.deleteSingleFile("./data/" + this.gameCode + ".txt");

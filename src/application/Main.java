@@ -37,6 +37,7 @@ public class Main extends Application {
     	AdminScene adminScene = new AdminScene();
     	adminScene.setOnLogoutHandle(() -> switchToLoginView(null));
     	adminScene.setOnCreateGameHandle(() -> switchToGameSetupView(adminScene.getIsTournament()));
+    	adminScene.setOnUserSceneHandle(() -> switchToUserSceneView());
     	
     	primaryStage.setTitle("ADMIN - SPACCA");
     	primaryStage.setScene(adminScene.getScene());
@@ -96,6 +97,14 @@ public class Main extends Application {
     	primaryStage.setTitle("INSTRUCTIONS - SPACCA");
     	primaryStage.setScene(instruction.getScene());
     }
+    
+    private void createUserSceneView() {
+    	UserScene user = new UserScene();
+    	user.setOnGoBackHomeHandler(() -> switchToLoginView(null));
+    	
+    	primaryStage.setTitle("MANAGE USER - SPACCA");
+    	primaryStage.setScene(user.getScene());
+    }
 
     // Method to switch to the home view
     private void switchToHomeView() {
@@ -129,6 +138,10 @@ public class Main extends Application {
     
     private void switchToInstructionView() {
     	createInstructionView();
+    }
+    
+    private void switchToUserSceneView() {
+    	createUserSceneView();
     }
 
     public static void main(String[] args) {

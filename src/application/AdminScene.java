@@ -23,6 +23,7 @@ import java.nio.file.Paths;
 public class AdminScene {
     private Runnable onLogoutHandle;
     private Runnable onCreateGameHandle;
+    private Runnable onUserSceneHandle;
 	
     private Scene scene;
     
@@ -40,7 +41,7 @@ public class AdminScene {
 		//logoutButton.setOnAction(event -> onLogoutHandle.run());
 		
         ImageView logoutImage = new ImageView(new Image(new File("./assets/logout.png").toURI().toString()));
-        logoutImage.setFitWidth(90);
+        logoutImage.setFitWidth(110);
         logoutImage.setFitHeight(50);
         
         logoutImage.setOnMouseClicked(event -> onLogoutHandle.run());
@@ -62,8 +63,14 @@ public class AdminScene {
         createSingleMatchImage.setFitHeight(50);
         
         createSingleMatchImage.setOnMouseClicked(event -> createGame(false));
+        
+        ImageView userList = new ImageView(new Image(new File("./assets/edit_user.png").toURI().toString()));
+        userList.setFitWidth(160);
+        userList.setFitHeight(50);
+        
+        userList.setOnMouseClicked(event -> onUserSceneHandle.run());
 
-		HBox topButtonsBox = new HBox(logoutImage, createTournamentImage, createSingleMatchImage);
+		HBox topButtonsBox = new HBox(logoutImage, createTournamentImage, createSingleMatchImage, userList);
 		topButtonsBox.setSpacing(10);
 		topButtonsBox.setPadding(new Insets(10));
 		topButtonsBox.setAlignment(Pos.TOP_LEFT);
@@ -105,6 +112,10 @@ public class AdminScene {
     
     public void setOnCreateGameHandle(Runnable handler) {
     	onCreateGameHandle = handler;
+    }
+    
+    public void setOnUserSceneHandle(Runnable handler) {
+    	onUserSceneHandle = handler;
     }
     
     public void createGame(boolean isTournament) {
