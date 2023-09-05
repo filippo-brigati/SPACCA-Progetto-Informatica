@@ -43,11 +43,12 @@ public class LoginScene {
     public LoginScene(String fileCode) {
         StackPane root = new StackPane();
         
-        ImageView imageView = new ImageView(new Image(new File("./assets/logo.png").toURI().toString()));
+        Image image = new Image(getClass().getClassLoader().getResource("logo.png").toExternalForm());
+        ImageView imageView = new ImageView(image);
+        
         imageView.setFitWidth(600);
         imageView.setFitHeight(300);
 
-        
         this.gridPane.setAlignment(Pos.CENTER);
         this.gridPane.setHgap(10);
         this.gridPane.setVgap(10);
@@ -63,7 +64,8 @@ public class LoginScene {
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("Password");
         
-        ImageView loginImage = new ImageView(new Image(new File("./assets/login.png").toURI().toString()));
+        Image loginImageFlag = new Image(getClass().getClassLoader().getResource("login.png").toExternalForm());
+        ImageView loginImage = new ImageView(loginImageFlag);
         loginImage.setFitWidth(100);
         loginImage.setFitHeight(50);
         
@@ -82,36 +84,37 @@ public class LoginScene {
         fileNotExistLabel.setTextFill(Color.RED);
         
         TextField gameCodeField = new TextField(fileCode);
-        //if(fileCode != null) { gameCodeField.setPromptText(fileCode); }
         gameCodeField.setPrefWidth(600);
         
-        ImageView buttonImage = new ImageView(new Image(new File("./assets/play.png").toURI().toString()));
+        Image btnImg = new Image(getClass().getClassLoader().getResource("play.png").toExternalForm());
+        ImageView buttonImage = new ImageView(btnImg);
         buttonImage.setFitWidth(100);
         buttonImage.setFitHeight(50);
         
         buttonImage.setOnMouseClicked(event -> checkExistringMatch(gameCodeField.getText()));
         
-        ImageView leaderBoardImage = new ImageView(new Image(new File("./assets/leaderboard.png").toURI().toString()));
+        Image ldrBI = new Image(getClass().getClassLoader().getResource("leaderboard.png").toExternalForm());
+        ImageView leaderBoardImage = new ImageView(ldrBI);
         leaderBoardImage.setFitWidth(50);
         leaderBoardImage.setFitHeight(50);
         
         leaderBoardImage.setOnMouseClicked(event -> onLeaderBoard.run());
         
-        ImageView instructionImage = new ImageView(new Image(new File("./assets/info.png").toURI().toString()));
+        ImageView instructionImage = new ImageView(new Image(getClass().getClassLoader().getResource("info.png").toExternalForm()));
         instructionImage.setFitWidth(50);
         instructionImage.setFitHeight(50); 
         
         instructionImage.setOnMouseClicked(event -> onInstruction.run());
         
-        HBox image = new HBox(10);
-        image.setAlignment(Pos.CENTER_RIGHT);
-        image.setPrefWidth(600);
+        HBox imageBox = new HBox(10);
+        imageBox.setAlignment(Pos.CENTER_RIGHT);
+        imageBox.setPrefWidth(600);
         
-        image.getChildren().addAll(leaderBoardImage, instructionImage);
+        imageBox.getChildren().addAll(leaderBoardImage, instructionImage);
         
         VBox vbox = new VBox(20);
         vbox.setAlignment(Pos.CENTER);
-        vbox.getChildren().addAll(image, imageView, gameCodeField, buttonImage, hbox, loginImage);
+        vbox.getChildren().addAll(imageBox, imageView, gameCodeField, buttonImage, hbox, loginImage);
         
         this.gridPane.add(vbox, 0, 0);
         this.gridPane.add(fileNotExistLabel, 0, 1);

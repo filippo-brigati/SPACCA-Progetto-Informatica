@@ -16,7 +16,6 @@ import javafx.scene.layout.VBox;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -43,7 +42,7 @@ public class TournamentLobby {
 		//Button logoutButton = new Button("Logout");
 		//logoutButton.setOnAction(event -> onLogoutHandle.run());
         
-        ImageView logoutButton = new ImageView(new Image(new File("./assets/logout.png").toURI().toString()));
+        ImageView logoutButton = new ImageView(new Image(getClass().getClassLoader().getResource("logout.png").toExternalForm()));
         logoutButton.setFitWidth(90);
         logoutButton.setFitHeight(50);
         

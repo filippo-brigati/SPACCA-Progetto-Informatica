@@ -10,7 +10,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.paint.Color;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -25,12 +24,12 @@ public class LeaderboardScene {
 
         VBox playerListVBox = new VBox(20);
 
-        ImageView home = new ImageView(new Image(new File("./assets/home.png").toURI().toString()));
+        ImageView home = new ImageView(new Image(getClass().getClassLoader().getResource("home.png").toExternalForm()));
         home.setFitWidth(110);
         home.setFitHeight(50);
         home.setOnMouseClicked(event -> onLogoutHandle.run());
 
-        ImageView headerImage = new ImageView(new Image(new File("./assets/leaderboard_title.png").toURI().toString()));
+        ImageView headerImage = new ImageView(new Image(getClass().getClassLoader().getResource("leaderboard_title.png").toExternalForm()));
         headerImage.setFitWidth(600);
         headerImage.setFitHeight(80);
         headerImage.setPreserveRatio(true);

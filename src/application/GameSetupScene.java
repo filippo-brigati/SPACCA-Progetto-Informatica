@@ -39,14 +39,14 @@ public class GameSetupScene {
         //Label titleLabel = new Label(title);
         //titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
         
-        ImageView titleLabel = new ImageView(new Image(new File(this.title).toURI().toString()));
+        ImageView titleLabel = new ImageView(new Image(getClass().getClassLoader().getResource(this.title).toExternalForm()));
         titleLabel.setFitWidth(290);
         titleLabel.setFitHeight(40);
         
         //Button logoutButton = new Button("Logout");
         //logoutButton.setOnAction(event -> onLogoutHandle.run());
         
-        ImageView logoutButton = new ImageView(new Image(new File("./assets/logout.png").toURI().toString()));
+        ImageView logoutButton = new ImageView(new Image(getClass().getClassLoader().getResource("logout.png").toExternalForm()));
         logoutButton.setFitWidth(90);
         logoutButton.setFitHeight(50);
         
@@ -54,7 +54,7 @@ public class GameSetupScene {
         
         //Label playerInputLabel = new Label("Enter Player Name:");
         
-        ImageView playerInputLabel = new ImageView(new Image(new File("./assets/enter_player_name.png").toURI().toString()));
+        ImageView playerInputLabel = new ImageView(new Image(getClass().getClassLoader().getResource("enter_player_name.png").toExternalForm()));
         playerInputLabel.setFitWidth(280);
         playerInputLabel.setFitHeight(30);        
         
@@ -65,7 +65,7 @@ public class GameSetupScene {
         //Button addButton = new Button("Add Player");
         //addButton.setOnAction(e -> addPlayer(playerInputField, playerListView));
         
-        ImageView addButton = new ImageView(new Image(new File("./assets/add_player.png").toURI().toString()));
+        ImageView addButton = new ImageView(new Image(getClass().getClassLoader().getResource("add_player.png").toExternalForm()));
         addButton.setFitWidth(160);
         addButton.setFitHeight(50);
         
@@ -74,7 +74,7 @@ public class GameSetupScene {
         //Button doneButton = new Button("Done");
         //doneButton.setOnAction(event -> this.generateDeckAndUserCard());
         
-        ImageView doneButton = new ImageView(new Image(new File("./assets/create_game.png").toURI().toString()));
+        ImageView doneButton = new ImageView(new Image(getClass().getClassLoader().getResource("create_game.png").toExternalForm()));
         doneButton.setFitWidth(160);
         doneButton.setFitHeight(50); 
         
@@ -106,9 +106,9 @@ public class GameSetupScene {
     
     public void interfaceSetup() {
     	if(this.isTournament == false) {
-    		title = "./assets/create_single_game_white.png";
+    		title = "create_single_game_white.png";
     	} else {
-    		title = "./assets/create_tournament_white.png";
+    		title = "create_tournament_white.png";
     	}
     }
 	

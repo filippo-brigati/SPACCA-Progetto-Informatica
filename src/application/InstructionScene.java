@@ -8,8 +8,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.io.File;
-
 import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
 
@@ -19,7 +17,7 @@ public class InstructionScene {
 	private Runnable onGoBackHomeHandler;
 	
 	public InstructionScene() {
-        ImageView homeImage = new ImageView(new Image(new File("./assets/home.png").toURI().toString()));
+        ImageView homeImage = new ImageView(new Image(getClass().getClassLoader().getResource("home.png").toExternalForm()));
         homeImage.setFitWidth(90);
         homeImage.setFitHeight(50);
         

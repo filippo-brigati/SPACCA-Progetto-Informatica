@@ -75,17 +75,17 @@ public class UserScene {
         //Button saveButton = new Button("Save Changes");
         //saveButton.setOnAction(e -> saveUserDataToFile("./data/leaderboard.txt", tableView.getItems()));
 
-        ImageView headerImage = new ImageView(new Image(new File("./assets/manage_user.png").toURI().toString()));
+        ImageView headerImage = new ImageView(new Image(getClass().getClassLoader().getResource("manage_user.png").toExternalForm()));
         headerImage.setFitWidth(600);
         headerImage.setFitHeight(80);
         headerImage.setPreserveRatio(true);
         
-        ImageView home = new ImageView(new Image(new File("./assets/home.png").toURI().toString()));
+        ImageView home = new ImageView(new Image(getClass().getClassLoader().getResource("home.png").toExternalForm()));
         home.setFitWidth(110);
         home.setFitHeight(50);
         home.setOnMouseClicked(event -> onGoBackHomeHandler.run());
         
-        ImageView saveChanges = new ImageView(new Image(new File("./assets/save_changes.png").toURI().toString()));
+        ImageView saveChanges = new ImageView(new Image(getClass().getClassLoader().getResource("save_changes.png").toExternalForm()));
         saveChanges.setFitWidth(180);
         saveChanges.setFitHeight(50);
         saveChanges.setOnMouseClicked(e -> saveUserDataToFile("./data/leaderboard.txt", tableView.getItems()));

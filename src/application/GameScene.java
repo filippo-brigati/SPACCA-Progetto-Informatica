@@ -1,7 +1,5 @@
 package application;
 
-import java.io.File;
-
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -60,7 +58,7 @@ public class GameScene {
         
         this.setUpGame();
         
-        this.logoutImage = new ImageView(new Image(new File("./assets/logout.png").toURI().toString()));
+        this.logoutImage = new ImageView(new Image(getClass().getClassLoader().getResource("logout.png").toExternalForm()));
         this.logoutImage.setFitWidth(90);
         this.logoutImage.setFitHeight(50);
         
@@ -78,7 +76,7 @@ public class GameScene {
         this.topPane.setAlignment(Pos.CENTER);
         this.rootPane.setTop(this.topPane);
 
-		this.gameImage = new ImageView(new Image(new File("./assets/" + this.gameCard + ".png").toURI().toString()));
+		this.gameImage = new ImageView(new Image(getClass().getClassLoader().getResource(this.gameCard + ".png").toExternalForm()));
 		
         this.gameImage.setFitWidth(120);
         this.gameImage.setFitHeight(200);
@@ -90,9 +88,9 @@ public class GameScene {
         for (Integer playerCard : playerCardArray) {
         	ImageView imageView = new ImageView();
         	if(this.currentPlayer.contains("BOT")) {
-        		imageView = new ImageView(new Image(new File("./assets/back.png").toURI().toString()));
+        		imageView = new ImageView(new Image(getClass().getClassLoader().getResource("back.png").toExternalForm()));
         	} else {
-        		imageView = new ImageView(new Image(new File("./assets/" + playerCard + ".png").toURI().toString()));	
+        		imageView = new ImageView(new Image(getClass().getClassLoader().getResource(playerCard + ".png").toExternalForm()));	
         	}
             imageView.setFitWidth(120);
             imageView.setFitHeight(200);
@@ -169,7 +167,7 @@ public class GameScene {
 	            if(this.currentPlayer.contains("BOT")) {
 	                for (Integer playerCard : playerCardArray) {
 	                	System.out.println("CARD:" + playerCard);
-	                    ImageView imageView = new ImageView(new Image(new File("./assets/back.png").toURI().toString()));
+	                    ImageView imageView = new ImageView(new Image(getClass().getClassLoader().getResource("back.png").toExternalForm()));
 	                    imageView.setFitWidth(120);
 	                    imageView.setFitHeight(200);
 	                    
@@ -180,7 +178,7 @@ public class GameScene {
 	            } else {
 	                for (Integer playerCard : playerCardArray) {
 	                	System.out.println("CARD:" + playerCard);
-	                    ImageView imageView = new ImageView(new Image(new File("./assets/" + playerCard + ".png").toURI().toString()));
+	                    ImageView imageView = new ImageView(new Image(getClass().getClassLoader().getResource(playerCard + ".png").toExternalForm()));
 	                    imageView.setFitWidth(120);
 	                    imageView.setFitHeight(200);
 	                    
@@ -232,7 +230,7 @@ public class GameScene {
 		if(this.gameCard.equals("back") || card == valid) {
 			this.gameCard = card.toString();
 
-			this.gameImage.setImage(new Image(new File("./assets/" + this.gameCard + ".png").toURI().toString()));
+			this.gameImage.setImage(new Image(getClass().getClassLoader().getResource(this.gameCard + ".png").toExternalForm()));
 			this.gameImage.setFitWidth(120);
 			this.gameImage.setFitHeight(200);
             
@@ -241,7 +239,7 @@ public class GameScene {
 			this.playerCardArray.removeIf(item -> item == card);
 			
 	        for (Integer playerCard : playerCardArray) {
-	            ImageView newImageView = new ImageView(new Image(new File("./assets/" + playerCard + ".png").toURI().toString()));
+	            ImageView newImageView = new ImageView(new Image(getClass().getClassLoader().getResource(playerCard + ".png").toExternalForm()));
 	            newImageView.setFitWidth(120);
 	            newImageView.setFitHeight(200);
 	            
@@ -277,7 +275,7 @@ public class GameScene {
 				System.out.println("NUOVA CARTA ESTRATTA: " + this.gameCard);
 				
 				this.gameImage = new ImageView();
-				this.gameImage.setImage(new Image(new File("./assets/" + this.gameCard + ".png").toURI().toString()));
+				this.gameImage.setImage(new Image(getClass().getClassLoader().getResource(this.gameCard + ".png").toExternalForm()));
 				
 				this.gameImage.setFitWidth(120);
 				this.gameImage.setFitHeight(200);
@@ -294,7 +292,7 @@ public class GameScene {
 		        		found = true;
 		        		
 		    			this.gameCard = playerCard.toString();
-		    			this.gameImage.setImage(new Image(new File("./assets/" + this.gameCard + ".png").toURI().toString()));
+		    			this.gameImage.setImage(new Image(getClass().getClassLoader().getResource(this.gameCard + ".png").toExternalForm()));
 		    			
 		    			this.gameImage.setFitWidth(120);
 		    			this.gameImage.setFitHeight(200);
@@ -379,9 +377,9 @@ public class GameScene {
                         
                         ImageView newImageView = new ImageView();
                         if(this.currentPlayer.contains("BOT")) {
-                            newImageView = new ImageView(new Image(new File("./assets/back.png").toURI().toString()));
+                            newImageView = new ImageView(new Image(getClass().getClassLoader().getResource("back.png").toExternalForm()));
                         } else {
-                            newImageView = new ImageView(new Image(new File("./assets/" + deckNumber + ".png").toURI().toString()));
+                            newImageView = new ImageView(new Image(getClass().getClassLoader().getResource(deckNumber + ".png").toExternalForm()));
                         }
         	            newImageView.setFitWidth(120);
         	            newImageView.setFitHeight(200);	

@@ -40,7 +40,7 @@ public class AdminScene {
 		//Button logoutButton = new Button("Logout");
 		//logoutButton.setOnAction(event -> onLogoutHandle.run());
 		
-        ImageView logoutImage = new ImageView(new Image(new File("./assets/logout.png").toURI().toString()));
+        ImageView logoutImage = new ImageView(new Image(getClass().getClassLoader().getResource("logout.png").toExternalForm()));
         logoutImage.setFitWidth(110);
         logoutImage.setFitHeight(50);
         
@@ -49,7 +49,7 @@ public class AdminScene {
 		//Button createTournamentButton = new Button("Create Tournament");
 		//createTournamentButton.setOnAction(event -> createGame(true));
 		
-        ImageView createTournamentImage = new ImageView(new Image(new File("./assets/create_tournament.png").toURI().toString()));
+        ImageView createTournamentImage = new ImageView(new Image(getClass().getClassLoader().getResource("create_tournament.png").toExternalForm()));
         createTournamentImage.setFitWidth(290);
         createTournamentImage.setFitHeight(50);
         
@@ -58,13 +58,13 @@ public class AdminScene {
 		//Button createSimpleMatchButton = new Button("Create Simple Match");
 		//createSimpleMatchButton.setOnAction(event -> createGame(false));
 		
-        ImageView createSingleMatchImage = new ImageView(new Image(new File("./assets/create_single_game.png").toURI().toString()));
+        ImageView createSingleMatchImage = new ImageView(new Image(getClass().getClassLoader().getResource("create_single_game.png").toExternalForm()));
         createSingleMatchImage.setFitWidth(290);
         createSingleMatchImage.setFitHeight(50);
         
         createSingleMatchImage.setOnMouseClicked(event -> createGame(false));
         
-        ImageView userList = new ImageView(new Image(new File("./assets/edit_user.png").toURI().toString()));
+        ImageView userList = new ImageView(new Image(getClass().getClassLoader().getResource("edit_user.png").toExternalForm()));
         userList.setFitWidth(160);
         userList.setFitHeight(50);
         
@@ -78,7 +78,7 @@ public class AdminScene {
 
 		//Label registeredMatchesLabel = new Label("Registered Matches");
 		
-        ImageView registeredMatchesLabel = new ImageView(new Image(new File("./assets/registered_match.png").toURI().toString()));
+        ImageView registeredMatchesLabel = new ImageView(new Image(getClass().getClassLoader().getResource("registered_match.png").toExternalForm()));
         registeredMatchesLabel.setFitWidth(350);
         registeredMatchesLabel.setFitHeight(50);
 		

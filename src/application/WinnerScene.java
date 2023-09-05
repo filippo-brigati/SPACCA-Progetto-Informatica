@@ -36,7 +36,7 @@ public class WinnerScene {
 
         StackPane root = new StackPane();
         
-        ImageView imageView = new ImageView(new Image(new File("./assets/winner.png").toURI().toString()));
+        ImageView imageView = new ImageView(new Image(getClass().getClassLoader().getResource("winner.png").toExternalForm()));
         imageView.setFitWidth(500);
         imageView.setFitHeight(300);
         
@@ -158,7 +158,7 @@ public class WinnerScene {
                 }
                 
                 if(lines.size() == 1 && !lines.get(0).contains(",")) {
-                	ImageView imageView = new ImageView(new Image(new File("./assets/home.png").toURI().toString()));
+                	ImageView imageView = new ImageView(new Image(getClass().getClassLoader().getResource("home.png").toExternalForm()));
                     imageView.setFitWidth(120);
                     imageView.setFitHeight(40);
                     
@@ -176,13 +176,13 @@ public class WinnerScene {
                     
                     this.deleteTournamentFiles();
                 } else {
-                	ImageView imageView = new ImageView(new Image(new File("./assets/previous.png").toURI().toString()));
+                	ImageView imageView = new ImageView(new Image(getClass().getClassLoader().getResource("previous.png").toExternalForm()));
                     imageView.setFitWidth(120);
                     imageView.setFitHeight(40);
                     
                     imageView.setOnMouseClicked(event -> onBackHandle.run());
                     
-                	ImageView leaderboardImage = new ImageView(new Image(new File("./assets/leaderboard.png").toURI().toString()));
+                	ImageView leaderboardImage = new ImageView(new Image(getClass().getClassLoader().getResource("leaderboard.png").toExternalForm()));
                 	leaderboardImage.setFitWidth(120);
                 	leaderboardImage.setFitHeight(40);
                     
@@ -227,7 +227,7 @@ public class WinnerScene {
                         	score = 100;
                         	emptyDeck = true;
                         	
-                        	ImageView imageView = new ImageView(new Image(new File("./assets/home.png").toURI().toString()));
+                        	ImageView imageView = new ImageView(new Image(getClass().getClassLoader().getResource("home.png").toExternalForm()));
                             imageView.setFitWidth(120);
                             imageView.setFitHeight(40);
                             
@@ -264,7 +264,7 @@ public class WinnerScene {
                         }
                     }
                 	
-                	ImageView imageView = new ImageView(new Image(new File("./assets/home.png").toURI().toString()));
+                	ImageView imageView = new ImageView(new Image(getClass().getClassLoader().getResource("home.png").toExternalForm()));
                     imageView.setFitWidth(120);
                     imageView.setFitHeight(40);
                     
