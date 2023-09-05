@@ -48,10 +48,13 @@ public class GameScene {
     private Label gameInfoLabel;
     private VBox topPane;
     private ImageView logoutImage;
+    
+    private boolean isGameWon = false;
 
     public GameScene(String gameCode) {
         this.gameCode = gameCode;
         this.rootPane = new BorderPane();
+        this.isGameWon = false;
         
         this.gameCard = null;
         
@@ -129,84 +132,86 @@ public class GameScene {
 	}
 	
 	private void getPlayerCard() {
-		String fileName = "./data/" + this.gameCode + ".txt";
-		
-		this.playerCardArray.clear();
-		
-		try(BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-			String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-                for(int i = 0; i < parts.length; i++) { System.out.println("DEBUG: " + parts[i]); }
-                if(parts[0].toString().equals(this.currentPlayer)) {
-                	if(parts.length >= 1) {
-                    	String numberPart = parts[1].trim();
-                    	System.out.println(numberPart);
-                        for (char digitChar : numberPart.toCharArray()) {
-                            try {
-                                int digit = Integer.parseInt(String.valueOf(digitChar));
+		if(this.isGameWon == false) {
+			String fileName = "./data/" + this.gameCode + ".txt";
+			
+			this.playerCardArray.clear();
+			
+			try(BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+				String line;
+	            while ((line = br.readLine()) != null) {
+	                String[] parts = line.split(",");
+	                for(int i = 0; i < parts.length; i++) { System.out.println("DEBUG: " + parts[i]); }
+	                if(parts[0].toString().equals(this.currentPlayer)) {
+	                	if(parts.length > 1) {
+	                    	String numberPart = parts[1].trim();
+	                    	System.out.println(numberPart);
+	                        for (char digitChar : numberPart.toCharArray()) {
+	                            try {
+	                                int digit = Integer.parseInt(String.valueOf(digitChar));
 
-                                this.playerCardArray.add(digit);
-                            } catch (NumberFormatException e) {
-                            	System.out.println(e);
-                            }
-                        }	
-                	}
-                }
-            }
-            
-            br.close();
-            System.out.println("PLAYER: " + this.currentPlayer + " - CARD: " + this.playerCardArray);
-            
-            this.bottomImages = new HBox(10);
-            this.bottomImages.setAlignment(Pos.CENTER);
-            this.bottomImages.getChildren().clear();
-            
-            if(this.currentPlayer.contains("BOT")) {
-                for (Integer playerCard : playerCardArray) {
-                	System.out.println("CARD:" + playerCard);
-                    ImageView imageView = new ImageView(new Image(new File("./assets/back.png").toURI().toString()));
-                    imageView.setFitWidth(120);
-                    imageView.setFitHeight(200);
-                    
-                    imageView.setOnMouseClicked(event -> this.handleEvent(playerCard));
-                    
-                    this.bottomImages.getChildren().add(imageView);
-                }
-            } else {
-                for (Integer playerCard : playerCardArray) {
-                	System.out.println("CARD:" + playerCard);
-                    ImageView imageView = new ImageView(new Image(new File("./assets/" + playerCard + ".png").toURI().toString()));
-                    imageView.setFitWidth(120);
-                    imageView.setFitHeight(200);
-                    
-                    imageView.setOnMouseClicked(event -> this.handleEvent(playerCard));
-                    
-                    System.out.println(playerCard);
-                    
-                    this.bottomImages.getChildren().add(imageView);
-                }
-            }
-            
-            this.rootPane.setBottom(this.bottomImages);
-            
-            if(this.currentPlayer.contains("BOT")) {
-                ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
-                
-                Runnable task = () -> {
-                    Platform.runLater(() -> {
-                        botLogic();
-                    });
-                };
+	                                this.playerCardArray.add(digit);
+	                            } catch (NumberFormatException e) {
+	                            	System.out.println(e);
+	                            }
+	                        }	
+	                	}
+	                }
+	            }
+	            
+	            br.close();
+	            System.out.println("PLAYER: " + this.currentPlayer + " - CARD: " + this.playerCardArray);
+	            
+	            this.bottomImages = new HBox(10);
+	            this.bottomImages.setAlignment(Pos.CENTER);
+	            this.bottomImages.getChildren().clear();
+	            
+	            if(this.currentPlayer.contains("BOT")) {
+	                for (Integer playerCard : playerCardArray) {
+	                	System.out.println("CARD:" + playerCard);
+	                    ImageView imageView = new ImageView(new Image(new File("./assets/back.png").toURI().toString()));
+	                    imageView.setFitWidth(120);
+	                    imageView.setFitHeight(200);
+	                    
+	                    imageView.setOnMouseClicked(event -> this.handleEvent(playerCard));
+	                    
+	                    this.bottomImages.getChildren().add(imageView);
+	                }
+	            } else {
+	                for (Integer playerCard : playerCardArray) {
+	                	System.out.println("CARD:" + playerCard);
+	                    ImageView imageView = new ImageView(new Image(new File("./assets/" + playerCard + ".png").toURI().toString()));
+	                    imageView.setFitWidth(120);
+	                    imageView.setFitHeight(200);
+	                    
+	                    imageView.setOnMouseClicked(event -> this.handleEvent(playerCard));
+	                    
+	                    System.out.println(playerCard);
+	                    
+	                    this.bottomImages.getChildren().add(imageView);
+	                }
+	            }
+	            
+	            this.rootPane.setBottom(this.bottomImages);
+	            
+	            if(this.currentPlayer.contains("BOT")) {
+	                ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+	                
+	                Runnable task = () -> {
+	                    Platform.runLater(() -> {
+	                        botLogic();
+	                    });
+	                };
 
-                int timeoutInSeconds = 2;
-                executorService.schedule(task, timeoutInSeconds, TimeUnit.SECONDS);
-                
-                executorService.shutdown();
-            	
-            }
-		} catch(IOException e) {
-			e.printStackTrace();
+	                int timeoutInSeconds = 2;
+	                executorService.schedule(task, timeoutInSeconds, TimeUnit.SECONDS);
+	                
+	                executorService.shutdown();
+	            	
+	            }
+			} catch(IOException e) {
+				e.printStackTrace();
+			}			
 		}
 	}
 	
@@ -248,6 +253,7 @@ public class GameScene {
 			if(this.playerCardArray.size() == 0) {
 				this.removeCardFromFile(card);
 				onGameWin.run();
+				this.isGameWon = true;
 			} else {
 				this.removeCardFromFile(card);
 			}
@@ -260,59 +266,60 @@ public class GameScene {
 	}
 	
 	private void botLogic() {
-		boolean found = false;
-		
-		if(this.gameCard.startsWith("back") || this.gameCard.startsWith("8") || this.gameCard.startsWith("9")) {
-			Integer flag = this.playerCardArray.get(0);
+		if(this.isGameWon == false) {
+			boolean found = false;
 			
-			this.gameCard = flag.toString();
-			
-			System.out.println("NUOVA CARTA ESTRATTA: " + this.gameCard);
-			
-			this.gameImage = new ImageView();
-			this.gameImage.setImage(new Image(new File("./assets/" + this.gameCard + ".png").toURI().toString()));
-			
-			this.gameImage.setFitWidth(120);
-			this.gameImage.setFitHeight(200);
-			
-			this.rootPane.setCenter(this.gameImage);
-			
-			this.playerCardArray.removeIf(card -> card == Integer.parseInt(this.gameCard));
-			this.removeCardFromFile(Integer.parseInt(this.gameCard));
-		} else {
-	        for (Integer playerCard : this.playerCardArray) {
-	        	Integer valid = Integer.parseInt(this.gameCard) + 1;
+			if(this.gameCard.startsWith("back") || this.gameCard.startsWith("8") || this.gameCard.startsWith("9")) {
+				Integer flag = this.playerCardArray.get(0);
+				
+				this.gameCard = flag.toString();
+				
+				System.out.println("NUOVA CARTA ESTRATTA: " + this.gameCard);
+				
+				this.gameImage = new ImageView();
+				this.gameImage.setImage(new Image(new File("./assets/" + this.gameCard + ".png").toURI().toString()));
+				
+				this.gameImage.setFitWidth(120);
+				this.gameImage.setFitHeight(200);
+				
+				this.rootPane.setCenter(this.gameImage);
+				
+				this.playerCardArray.removeIf(card -> card == Integer.parseInt(this.gameCard));
+				this.removeCardFromFile(Integer.parseInt(this.gameCard));
+			} else {
+		        for (Integer playerCard : this.playerCardArray) {
+		        	Integer valid = Integer.parseInt(this.gameCard) + 1;
 
-	        	if(valid == playerCard && found == false) {
-	        		found = true;
-	        		
-	    			this.gameCard = playerCard.toString();
-	    			this.gameImage.setImage(new Image(new File("./assets/" + this.gameCard + ".png").toURI().toString()));
-	    			
-	    			this.gameImage.setFitWidth(120);
-	    			this.gameImage.setFitHeight(200);
-	    			
-	    			this.rootPane.setCenter(this.gameImage);
-	        	}
-	        }
-	        
-	        if(found == true) {
-	        	this.playerCardArray.removeIf(card -> card == Integer.parseInt(this.gameCard));
-	        	this.removeCardFromFile(Integer.parseInt(this.gameCard));
-	        } else {
-	        	this.drawFromDeck();
-	        }
-		}
-		
-		this.updateCurrentCard();
-		if(this.playerCardArray.size() == 0) { onGameWin.run(); }
-		else {
-			this.moveToNextPlayer();
+		        	if(valid == playerCard && found == false) {
+		        		found = true;
+		        		
+		    			this.gameCard = playerCard.toString();
+		    			this.gameImage.setImage(new Image(new File("./assets/" + this.gameCard + ".png").toURI().toString()));
+		    			
+		    			this.gameImage.setFitWidth(120);
+		    			this.gameImage.setFitHeight(200);
+		    			
+		    			this.rootPane.setCenter(this.gameImage);
+		        	}
+		        }
+		        
+		        if(found == true) {
+		        	this.playerCardArray.removeIf(card -> card == Integer.parseInt(this.gameCard));
+		        	this.removeCardFromFile(Integer.parseInt(this.gameCard));
+		        } else {
+		        	this.drawFromDeck();
+		        }
+			}
+			
+			this.updateCurrentCard();
+			if(this.playerCardArray.size() == 0) { onGameWin.run(); }
+			else {
+				this.moveToNextPlayer();
+			}			
 		}
 	}
 	
 	private void moveToNextPlayer() {
-
 		if(this.gameCard.contains("9")) {
 	        if(this.currentPlayerIndex < this.playerArray.size() - 2) {
 	        	this.currentPlayerIndex = this.currentPlayerIndex + 2;
@@ -382,6 +389,7 @@ public class GameScene {
                         this.bottomImages.getChildren().add(newImageView);
                 	} else {
                 		onGameWin.run();
+                		this.isGameWon = true;
                 	}
                 } else {
                 	updatedLines.add(line);
@@ -467,7 +475,7 @@ public class GameScene {
 	        
 	        reader.close();
 	    } catch (IOException e) {
-	        e.printStackTrace();
+	        System.out.println("File not found or deleted");
 	    }
 	    
 	    try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {

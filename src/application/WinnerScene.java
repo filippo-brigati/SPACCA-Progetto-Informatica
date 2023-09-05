@@ -3,6 +3,7 @@ package application;
 import javafx.scene.Scene;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.HPos;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -171,6 +172,8 @@ public class WinnerScene {
                 	
                     this.gridPane.add(userLabel, 0, 1);
                     this.gridPane.add(imageView, 0, 2);
+                    
+                    this.deleteTournamentFiles();
                 } else {
                 	ImageView imageView = new ImageView(new Image(new File("./assets/previous.png").toURI().toString()));
                     imageView.setFitWidth(120);
@@ -232,6 +235,9 @@ public class WinnerScene {
                             this.gridPane.setHgap(10);
                             this.gridPane.setVgap(10);
                             this.gridPane.setPadding(new Insets(10));
+                            
+                            GridPane.setHalignment(userLabel, HPos.CENTER);
+                            GridPane.setHalignment(imageView, HPos.CENTER);
                         }
                         this.playerScores.put(username, score);
 
@@ -271,6 +277,8 @@ public class WinnerScene {
                     this.gridPane.setVgap(10);
                     this.gridPane.setPadding(new Insets(10));
                 }
+                
+                this.deleteSingleFile("./data/" + this.gameCode + ".txt");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -326,6 +334,52 @@ public class WinnerScene {
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+    
+    public void deleteTournamentFiles() {
+    	File directory = new File("./data/");
+    	String fileToDelete = "";	
+        int indexOfHyphen = (this.gameCode + ".txt").indexOf('_');
+
+        if (indexOfHyphen != -1) {
+        	fileToDelete = fileToDelete + (this.gameCode + ".txt").substring(0, indexOfHyphen);
+        	
+        	System.out.println("FILE TO DELETE: " + fileToDelete);
+        	
+        	if (directory.exists() && directory.isDirectory()) {
+                File[] files = directory.listFiles();
+
+                if (files != null) {
+                    for (File file : files) {
+                        if (file.isFile() && file.getName().startsWith(fileToDelete)) {
+                            if (file.delete()) {
+                                System.out.println("Deleted file: " + file.getName());
+                            } else {
+                                System.err.println("Failed to delete file: " + file.getName());
+                            }
+                        }
+                    }
+                }
+            } else {
+                System.err.println("Directory does not exist or is not a directory: ./data/");
+            }
+        } else {
+            System.out.println("No hyphen found in the input string.");
+        }
+    }
+    
+    public void deleteSingleFile(String filePath) {
+        File fileToDelete = new File(filePath);
+
+        if (fileToDelete.exists() && fileToDelete.isFile()) {
+            if (fileToDelete.delete()) {
+                System.out.println("Deleted file: " + filePath);
+            } else {
+                System.err.println("Failed to delete file: " + filePath);
+            }
+        } else {
+            System.err.println("File does not exist or is not a file: " + filePath);
         }
     }
 }
