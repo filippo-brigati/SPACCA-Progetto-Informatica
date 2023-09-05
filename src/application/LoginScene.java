@@ -81,8 +81,8 @@ public class LoginScene {
         fileNotExistLabel = new Label();
         fileNotExistLabel.setTextFill(Color.RED);
         
-        TextField gameCodeField = new TextField();
-        if(fileCode != null) { gameCodeField.setPromptText(fileCode); }
+        TextField gameCodeField = new TextField(fileCode);
+        //if(fileCode != null) { gameCodeField.setPromptText(fileCode); }
         gameCodeField.setPrefWidth(600);
         
         ImageView buttonImage = new ImageView(new Image(new File("./assets/play.png").toURI().toString()));

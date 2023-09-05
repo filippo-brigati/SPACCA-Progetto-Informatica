@@ -119,8 +119,6 @@ public class WinnerScene {
                 System.out.println("No hyphen found in the input string.");
             }
             
-            System.out.println("MAIN FILE PATH: " + mainTournamentFilePath);
-            
             try (BufferedReader buffer = new BufferedReader(new FileReader(mainTournamentFilePath))) {
                 String l;
                 while ((l = buffer.readLine()) != null) {
@@ -133,30 +131,24 @@ public class WinnerScene {
                 return;
             }
             
-            System.out.println(lowestScorer);
-            System.out.println(lines);
-            
-            System.out.println("----------------");
+            String winnerUsername = "";
             Integer foundedIndex = 0;
             for(int i = 0; i < lines.size(); i++) {
             	String li = lines.get(i);
             	if(li.contains(",")) {
                 	String[] usernames = li.split(",");
                 	
-                	System.out.println("first: " + usernames[0] + " || " + "second: " + usernames[1]);
-                	
                 	if(usernames[0].equals(lowestScorer)) {
                 		li = usernames[1];
+                		winnerUsername = li;
                 	} else if(usernames[1].equals(lowestScorer)) {
                 		li = usernames[0];
+                		winnerUsername = li;
                 	}
                 	foundedIndex = i;
-                	System.out.println(li);
                 	lines.set(i, li);
             	}
             }
-            
-            System.out.println("----------------");
             
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(mainTournamentFilePath))) {
                 for (String updatedLine : lines) {
@@ -186,7 +178,7 @@ public class WinnerScene {
                     
                     imageView.setOnMouseClicked(event -> onBackHandle.run());
                 	
-                	Label userLabel = new Label(lines.get(foundedIndex) + " WON THE MATCH!");
+                	Label userLabel = new Label(winnerUsername + " WON THE MATCH!");
                     userLabel.setTextFill(Color.WHITE);
                     userLabel.setAlignment(Pos.CENTER);
                     userLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
@@ -203,17 +195,25 @@ public class WinnerScene {
             try (BufferedReader br = new BufferedReader(new FileReader("./data/" + this.gameCode + ".txt"))) {
                 String line;
                 int rowIndex = 1;
+                boolean emptyDeck = false;
+                
                 while ((line = br.readLine()) != null) {
                     if (!line.startsWith("DECK:") && !line.startsWith("CURRENT:")) {
                         String[] parts = line.split(",");
                         String username = parts[0];
                         
-                        System.out.println("USERNAME: " + username + " - SECOND PART: " + parts[1]);
+                        System.out.println(parts[0]);
+                        if(parts.length > 1) {
+                        	System.out.println(parts[1]);
+                        }
                         
                         int score = 0;
                         
-                        if(parts[1].length() == 1) {
+                        if(parts.length > 1) {
+                        	score = 100 - (parts[1].toString().length() * 10);
+                        } else {
                         	score = 100;
+                        	emptyDeck = true;
                         	
                         	ImageView imageView = new ImageView(new Image(new File("./assets/home.png").toURI().toString()));
                             imageView.setFitWidth(120);
@@ -232,13 +232,44 @@ public class WinnerScene {
                             this.gridPane.setHgap(10);
                             this.gridPane.setVgap(10);
                             this.gridPane.setPadding(new Insets(10));
-                        } else {
-                        	score = 100 - (parts[1].length() * 10);
                         }
                         this.playerScores.put(username, score);
 
                         rowIndex++;
                     }
+                }
+                
+                if(emptyDeck == false) {
+                	String higherScorer = null;
+                    int highestScore = Integer.MIN_VALUE;
+                	
+                    for (Map.Entry<String, Integer> entry : this.playerScores.entrySet()) {
+                        String username = entry.getKey();
+                        int score = entry.getValue();
+
+                        if (score > highestScore) {
+                        	highestScore = score;
+                        	higherScorer = username;
+                        }
+                    }
+                	
+                	ImageView imageView = new ImageView(new Image(new File("./assets/home.png").toURI().toString()));
+                    imageView.setFitWidth(120);
+                    imageView.setFitHeight(40);
+                    
+                    imageView.setOnMouseClicked(event -> onHomeHandle.run());
+                	
+                    Label userLabel = new Label(higherScorer + " WON THE MATCH!");
+                    userLabel.setTextFill(Color.WHITE);
+                    userLabel.setAlignment(Pos.CENTER);
+                    userLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+                	
+                    this.gridPane.add(userLabel, 0, rowIndex);
+                    this.gridPane.add(imageView, 0, rowIndex + 1);
+                    this.gridPane.setAlignment(Pos.CENTER);
+                    this.gridPane.setHgap(10);
+                    this.gridPane.setVgap(10);
+                    this.gridPane.setPadding(new Insets(10));
                 }
             } catch (IOException e) {
                 e.printStackTrace();

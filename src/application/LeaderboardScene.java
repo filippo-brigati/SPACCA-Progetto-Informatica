@@ -6,6 +6,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.paint.Color;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,33 +39,33 @@ public class LeaderboardScene {
             Map<String, String> player = playerData.get(i);
 
             HBox playerHBox = new HBox(10);
-            playerHBox.setPrefWidth(300);
+            playerHBox.setPrefWidth(1100);
             playerHBox.setSpacing(20);
-            playerHBox.setAlignment(Pos.CENTER); // Align horizontally at the center
+            playerHBox.setAlignment(Pos.CENTER);
 
             Label playerLabel = new Label(player.get("username") + " - " + player.get("score"));
             playerLabel.setStyle("-fx-text-fill: white; -fx-font-size: 20px;");
 
-            ImageView imageView;
-            if (i < 3) {
-                imageView = new ImageView(new Image(new File("./assets/leaderboard.png").toURI().toString()));
-            } else {
-                imageView = new ImageView(new Image(new File("./assets/minus.png").toURI().toString()));
-            }
-            imageView.setFitWidth(40);
-            imageView.setFitHeight(40);
-            imageView.setPreserveRatio(true);
-
-            playerHBox.getChildren().addAll(imageView, playerLabel);
+            playerHBox.getChildren().addAll(playerLabel);
             playerListVBox.getChildren().add(playerHBox);
+            
+            BackgroundFill backgroundFill = new BackgroundFill(Color.GREEN, null, null);
+            Background background = new Background(backgroundFill);
+            playerListVBox.setBackground(background);
         }
+        
+        ScrollPane scrollPane = new ScrollPane(playerListVBox);
+        BackgroundFill backgroundFill = new BackgroundFill(Color.GREEN, null, null);
+        Background background = new Background(backgroundFill);
+        scrollPane.setBackground(background);
 
-        VBox vbox = new VBox(home, headerImage, playerListVBox);
+        VBox vbox = new VBox(home, headerImage, scrollPane);
         vbox.setAlignment(Pos.TOP_CENTER);
         vbox.setPrefWidth(1100);
         vbox.setStyle("-fx-background-color: green;");
 
         Scene scene1 = new Scene(vbox, 1100, 700);
+        scene1.setFill(Color.GREEN);
         
         this.scene = scene1;
 	}
@@ -93,8 +95,6 @@ public class LeaderboardScene {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        System.out.println(playerData);
         return playerData;
     }
 }

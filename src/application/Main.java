@@ -43,7 +43,7 @@ public class Main extends Application {
     }
     
     private void createGameView(String gameCode) {
-    	GameScene game = new GameScene(primaryStage, gameCode);
+    	GameScene game = new GameScene(gameCode);
     	game.setOnLogoutHandle(() -> switchToLoginView(null));
     	game.setOnGameWinHandle(() -> switchToWinView(gameCode));
     	
