@@ -54,51 +54,45 @@ public class InstructionScene {
 
                 "1. Inizio del gioco:\n" +
 
-                "   - Il gioco inizia con un mazzo di carte completo.\n" +
+                "   - Il gioco inizia il mazzo contiene carte dal valore numerico da 1->7 + due carte speciali.\n" +
 
                 "   - Ogni giocatore riceve un numero uguale di carte all'inizio della partita.\n\n" +
 
                 "2. Turno di gioco:\n" +
 
-                "   - I giocatori giocano in senso orario o antiorario, a seconda delle preferenze.\n" +
+                "   - I giocatori giocano con l’ordine inserito dall’admin.\n" +
 
-                "   - Inizia il giocatore 1 e il turno procede in ordine numerico o nell'ordine in cui i giocatori sono seduti.\n" +
+                "   - La partita viene giocata un turno per volta alternando i giocatori.\n" +
 
                 "   - Durante il suo turno, un giocatore può fare una delle seguenti azioni:\n" +
 
-                "     - Scartare una carta: Il giocatore può scartare una carta che abbia un valore consecutivo rispetto a quella attualmente presente sul tavolo e con un valore superiore. Ad esempio, se sul tavolo c'è una '7', il giocatore può scartare solo una '8'.\n" +
+                "   - Scartare una carta: Il giocatore può scartare una carta che abbia un valore consecutivo rispetto a quella attualmente presente sul tavolo e con un valore superiore. \n     Ad esempio, se sul tavolo c'è una '3', il giocatore può scartare solo una '4'.\n" +
 
-                "     - Pescare una carta: Se un giocatore non può scartare una carta valida, deve pescare una carta dal mazzo. Dopo aver pescato, il suo turno termina e passa immediatamente al giocatore successivo.\n" +
+                "   - Pescare una carta: Se un giocatore non può scartare una carta valida, deve pescare una carta dal mazzo, cliccando su una carta a caso tra quelle che ha in mano. \n     Dopo aver pescato, il suo turno termina e passa immediatamente al giocatore successivo.\n" +
 
-                "     - Carta Cambio Verso: Se un giocatore scarta una carta 'Cambio Verso', il senso delle carte giocabili viene invertito. Se prima poteva giocare solo una carta con valore superiore, ora può giocare solo una carta con valore inferiore rispetto a quella sul tavolo, e viceversa.\n" +
+                "   - Carta Jolly: la carta ‘Jolly’ è una carta giocabile ogni turno e può assumere un qualsiasi valore numerico.\n" +
 
-                "     - Carta Stop: Se un giocatore scarta una carta 'Stop', il prossimo avversario salta il proprio turno. Il giocatore successivo a quello che ha giocato la carta 'Stop' prende il suo turno.\n" +
+                "   - Carta Stop: Se un giocatore scarta una carta 'Stop', il prossimo avversario salta il proprio turno.\n" +
 
-                "\n3. Vittoria:\n" +
+                "\n"+
 
                 "   - Il primo giocatore a finire tutte le sue carte è dichiarato vincitore della partita.\n\n" +
 
-                "4. Calcolo del punteggio:\n" +
+                
 
-                "   - Il vincitore della partita riceve 100 punti.\n" +
-
-                "   - Gli altri giocatori ricevono un punteggio basato sul numero di carte rimaste in mano:\n" +
-
-                "     - Punteggio = 100 - 10 * (numero di carte rimaste in mano).\n\n" +
-
-                "5. Fine della partita:\n" +
+                "3. Fine della partita:\n" +
 
                 "   - Il gioco termina quando un giocatore vince\n" +
 
-                "\n6. Nuova partita:\n" +
-
-                "   - Gli stessi giocatori possono iniziare una nuova partita o nuovi giocatori possono unirsi al tavolo per una nuova partita."
+                "   -Vengono assegnati i punteggi e viene aggiornata la Leaderboard."
 
                 +
 
-                "\n\nTORNEI:\n-La modalità tornei suddivide i giocatori in coppie, facendoli scontrare uno contro l'altro in partite singole, il vincitore della partita verrà accoppiato col vincitore di un'altro girone. la finale è tra i due giocatori rimamenti e si decide in una partita singola."
+                "\n\nTORNEI:\n-La modalità tornei suddivide i giocatori in coppie, facendoli scontrare uno contro l'altro in partite singole, il vincitore della partita verrà accoppiato col vincitore di un’altra partita. La finale è tra i due giocatori rimanenti e si decide in una partita singola.\n\n"
 
-                +"\nREGOLE ADMIN:\n-L'admin ha la possibilità di creare nuove partite, nuovi tornei ed eliminare partite esistenti. L'admin può aggiungere anche bot alla partita aggiungendo giocatori che hanno nel loro nome la stringa 'BOT'.\n"
+                +"ADMIN:\n"
+
+                + "L’admin è in grado di creare partite e tornei, aggiungere giocatori e bot alle partite, modificare il nome ed il punteggio di un utente, eliminare le partite salvate. L’ordine con cui l’admin aggiunge i giocatori alle partite sarà l’ordine con cui i giocatori si troveranno a giocare in partita. \n"
         );
         textArea.setStyle("-fx-control-inner-background: green;");
  

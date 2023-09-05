@@ -4,7 +4,6 @@ import javafx.scene.Scene;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -181,22 +180,13 @@ public class WinnerScene {
                     imageView.setFitHeight(40);
                     
                     imageView.setOnMouseClicked(event -> onBackHandle.run());
-                    
-                	ImageView leaderboardImage = new ImageView(new Image(getClass().getClassLoader().getResource("leaderboard.png").toExternalForm()));
-                	leaderboardImage.setFitWidth(120);
-                	leaderboardImage.setFitHeight(40);
-                    
-                	leaderboardImage.setOnMouseClicked(event -> onLeaderboardHandle.run());
                 	
                 	Label userLabel = new Label(winnerUsername + " WON THE MATCH!");
                     userLabel.setTextFill(Color.WHITE);
                     userLabel.setAlignment(Pos.CENTER);
                     userLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
-                	
-                    HBox hbox = new HBox();
-                    hbox.getChildren().addAll(imageView, leaderboardImage);
                     
-                    this.vbox.getChildren().addAll(hbox, userLabel);
+                    this.vbox.getChildren().addAll(imageView, userLabel);
                 }
                 
                 bw.close();

@@ -1,4 +1,4 @@
-Filippo,3180
+Filippo,3280
 Anna2,1240
 FilippoBOT,530
 Chiara2,520
@@ -17,6 +17,7 @@ paolo,100
 ANNA,100
 Luca,90
 Filippoo,80
+CIAO,80
 filippo,70
 GiovanniBOT,60
 LucaBOT,50

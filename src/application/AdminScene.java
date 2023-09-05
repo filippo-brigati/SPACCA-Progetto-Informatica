@@ -36,27 +36,18 @@ public class AdminScene {
 		BorderPane root = new BorderPane();
 
 		Scene scene1 = new Scene(root, 1100, 700);
-
-		//Button logoutButton = new Button("Logout");
-		//logoutButton.setOnAction(event -> onLogoutHandle.run());
 		
         ImageView logoutImage = new ImageView(new Image(getClass().getClassLoader().getResource("logout.png").toExternalForm()));
         logoutImage.setFitWidth(110);
         logoutImage.setFitHeight(50);
         
         logoutImage.setOnMouseClicked(event -> onLogoutHandle.run());
-
-		//Button createTournamentButton = new Button("Create Tournament");
-		//createTournamentButton.setOnAction(event -> createGame(true));
 		
         ImageView createTournamentImage = new ImageView(new Image(getClass().getClassLoader().getResource("create_tournament.png").toExternalForm()));
         createTournamentImage.setFitWidth(290);
         createTournamentImage.setFitHeight(50);
         
         createTournamentImage.setOnMouseClicked(event -> createGame(true));
-		
-		//Button createSimpleMatchButton = new Button("Create Simple Match");
-		//createSimpleMatchButton.setOnAction(event -> createGame(false));
 		
         ImageView createSingleMatchImage = new ImageView(new Image(getClass().getClassLoader().getResource("create_single_game.png").toExternalForm()));
         createSingleMatchImage.setFitWidth(290);
@@ -75,8 +66,6 @@ public class AdminScene {
 		topButtonsBox.setPadding(new Insets(10));
 		topButtonsBox.setAlignment(Pos.TOP_LEFT);
 		root.setTop(topButtonsBox);
-
-		//Label registeredMatchesLabel = new Label("Registered Matches");
 		
         ImageView registeredMatchesLabel = new ImageView(new Image(getClass().getClassLoader().getResource("registered_match.png").toExternalForm()));
         registeredMatchesLabel.setFitWidth(350);

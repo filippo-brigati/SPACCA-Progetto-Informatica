@@ -9,15 +9,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public class GameSetupScene {
     private Scene scene;
@@ -30,6 +37,9 @@ public class GameSetupScene {
     private String currentFileName = null;
     private String title = "";
     private Integer playerForRow = 0;
+    
+    private Integer players = 0;
+    private Label errorLabel;
 	
 	public GameSetupScene(boolean isTournament) {
 		this.isTournament = isTournament;
@@ -79,8 +89,11 @@ public class GameSetupScene {
         doneButton.setFitHeight(50); 
         
         doneButton.setOnMouseClicked(event -> this.generateDeckAndUserCard());
+        
+        errorLabel = new Label();
+        errorLabel.setTextFill(Color.RED);
 
-        VBox layout = new VBox(20, titleLabel, logoutButton, playerInputLabel, playerInputField, addButton, playerListView, doneButton);
+        VBox layout = new VBox(20, titleLabel, logoutButton, playerInputLabel, playerInputField, addButton, playerListView, doneButton, this.errorLabel);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(20));
         layout.setStyle("-fx-background-color: green;");
@@ -159,6 +172,8 @@ public class GameSetupScene {
         		
         		this.playerForRow = this.playerForRow + 1;
         	}
+        	
+        	this.players ++;
             writer.close();
             
             System.out.println("File create or edited: " + fullPath);
@@ -179,75 +194,112 @@ public class GameSetupScene {
     }
     
     private void generateDeckAndUserCard() {
-    	if(this.isTournament == false) {
-            ArrayList<Integer> deck = new ArrayList<>();
-        	String fullPath = "./data/" + this.currentFileName;
-            
-            for (int number = 1; number <= 9; number++) {
-                for (int count = 0; count < 4; count++) {
-                    deck.add(number);
-                }
-            }
-            
-            Collections.shuffle(deck);
-            
-            ArrayList<String> usernames = new ArrayList<>();
-
-            try (BufferedReader br = new BufferedReader(new FileReader(fullPath))) {
-                String line;
-                while ((line = br.readLine()) != null) {
-                    if (!line.startsWith("DECK:")) {
-                        usernames.add(line.trim());
+    	if(this.players > 1) {
+        	if(this.isTournament == false) {
+                ArrayList<Integer> deck = new ArrayList<>();
+            	String fullPath = "./data/" + this.currentFileName;
+                
+                for (int number = 1; number <= 9; number++) {
+                    for (int count = 0; count < 4; count++) {
+                        deck.add(number);
                     }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            
-            Random random = new Random();
+                
+                Collections.shuffle(deck);
+                
+                ArrayList<String> usernames = new ArrayList<>();
 
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fullPath, false))) {
-                for (String username : usernames) {
-                    writer.write(username);
-                    for (int i = 0; i < 5; i++) {
-                        int randomIndex = random.nextInt(deck.size());
-                        int card = deck.get(randomIndex);
-                        writer.write(String.valueOf(card));
-                        deck.remove(randomIndex);
+                try (BufferedReader br = new BufferedReader(new FileReader(fullPath))) {
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        if (!line.startsWith("DECK:")) {
+                            usernames.add(line.trim());
+                        }
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                
+                Random random = new Random();
+
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(fullPath, false))) {
+                    for (String username : usernames) {
+                        writer.write(username);
+                        for (int i = 0; i < 5; i++) {
+                            int randomIndex = random.nextInt(deck.size());
+                            int card = deck.get(randomIndex);
+                            writer.write(String.valueOf(card));
+                            deck.remove(randomIndex);
+                        }
+                        writer.newLine();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                
+                System.out.println("Created deck: " + deck);
+                
+                try {
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(fullPath, true));
+                    
+                    String fileDeck = "DECK:";
+                    String currentCard = "CURRENT:back";
+                    
+                    for (Integer card : deck) {
+                        fileDeck += card;
+                    }
+                    
+                    writer.write(fileDeck);
                     writer.newLine();
+                    writer.write(currentCard);
+                    writer.close();
+                    
+                    onLogoutHandle.run();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            
-            System.out.println("Created deck: " + deck);
-            
-            try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(fullPath, true));
-                
-                String fileDeck = "DECK:";
-                String currentCard = "CURRENT:back";
-                
-                for (Integer card : deck) {
-                    fileDeck += card;
-                }
-                
-                writer.write(fileDeck);
-                writer.newLine();
-                writer.write(currentCard);
-                writer.close();
-                
-                onLogoutHandle.run();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        	} else {
+        		if(this.playerForRow % 2 == 0) {
+            		onLogoutHandle.run();	
+        		} else {
+                    this.errorLabel.setText("You have to add another player!");
+                    this.errorLabel.setFont(new Font(18));
+        			System.out.println("You have to add another player!");
+        			
+        	        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+        	        
+        	        Runnable task = () -> {
+        	            Platform.runLater(() -> {
+        	                setToEmptyLabel();
+        	            });
+        	        };
+
+        	        int timeoutInSeconds = 2;
+        	        executorService.schedule(task, timeoutInSeconds, TimeUnit.SECONDS);
+        	        
+        	        executorService.shutdown();
+        		}
+        	}	
     	} else {
-    		if(this.playerForRow % 2 == 0) {
-        		onLogoutHandle.run();	
-    		} else {
-    			System.out.println("You have to add another player!");
-    		}
+            this.errorLabel.setText("You have to add more that one player!");
+            this.errorLabel.setFont(new Font(18));
+            
+            ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+            
+            Runnable task = () -> {
+                Platform.runLater(() -> {
+                    setToEmptyLabel();
+                });
+            };
+
+            int timeoutInSeconds = 2;
+            executorService.schedule(task, timeoutInSeconds, TimeUnit.SECONDS);
+            
+            executorService.shutdown();
     	}
+    }
+    
+    private void setToEmptyLabel() {
+    	this.errorLabel.setText("");
     }
 }
