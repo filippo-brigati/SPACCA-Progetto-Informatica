@@ -129,7 +129,6 @@ public class AdminScene {
         }
     }
     
-    // Create a custom cell for the ListView
     private ListCell<String> createMatchCell() {
         return new ListCell<>() {
             private final Button deleteButton = new Button("DELETE");

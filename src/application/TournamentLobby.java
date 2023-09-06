@@ -39,9 +39,6 @@ public class TournamentLobby {
         root.setSpacing(10);
         root.setAlignment(Pos.CENTER);
         
-		//Button logoutButton = new Button("Logout");
-		//logoutButton.setOnAction(event -> onLogoutHandle.run());
-        
         ImageView logoutButton = new ImageView(new Image(getClass().getClassLoader().getResource("logout.png").toExternalForm()));
         logoutButton.setFitWidth(90);
         logoutButton.setFitHeight(50);

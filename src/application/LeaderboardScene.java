@@ -58,7 +58,7 @@ public class LeaderboardScene {
         Background background = new Background(backgroundFill);
         scrollPane.setBackground(background);
 
-        VBox vbox = new VBox(home, headerImage, scrollPane);
+        VBox vbox = new VBox(20, home, headerImage, scrollPane);
         vbox.setAlignment(Pos.TOP_CENTER);
         vbox.setPrefWidth(1100);
         vbox.setStyle("-fx-background-color: green;");

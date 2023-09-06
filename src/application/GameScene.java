@@ -168,8 +168,14 @@ public class GameScene {
 	                for (Integer playerCard : playerCardArray) {
 	                	System.out.println("CARD:" + playerCard);
 	                    ImageView imageView = new ImageView(new Image(getClass().getClassLoader().getResource("back.png").toExternalForm()));
-	                    imageView.setFitWidth(120);
-	                    imageView.setFitHeight(200);
+	                    
+	                    if(this.playerCardArray.size() > 8) {
+		                    imageView.setFitWidth(120 / this.playerCardArray.size() + 80);
+		                    imageView.setFitHeight(200 / this.playerCardArray.size() + 90);
+	                    } else {
+		                    imageView.setFitWidth(120);
+		                    imageView.setFitHeight(200);
+	                    }
 	                    
 	                    imageView.setOnMouseClicked(event -> this.handleEvent(playerCard));
 	                    
@@ -179,8 +185,14 @@ public class GameScene {
 	                for (Integer playerCard : playerCardArray) {
 	                	System.out.println("CARD:" + playerCard);
 	                    ImageView imageView = new ImageView(new Image(getClass().getClassLoader().getResource(playerCard + ".png").toExternalForm()));
-	                    imageView.setFitWidth(120);
-	                    imageView.setFitHeight(200);
+
+	                    if(this.playerCardArray.size() > 8) {
+		                    imageView.setFitWidth(120 / this.playerCardArray.size() + 80);
+		                    imageView.setFitHeight(200 / this.playerCardArray.size() + 90);
+	                    } else {
+		                    imageView.setFitWidth(120);
+		                    imageView.setFitHeight(200);
+	                    }
 	                    
 	                    imageView.setOnMouseClicked(event -> this.handleEvent(playerCard));
 	                    

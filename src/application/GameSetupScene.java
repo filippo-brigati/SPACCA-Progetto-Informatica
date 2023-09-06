@@ -44,25 +44,16 @@ public class GameSetupScene {
 	public GameSetupScene(boolean isTournament) {
 		this.isTournament = isTournament;
 		this.interfaceSetup();
-		
-        // Create UI components
-        //Label titleLabel = new Label(title);
-        //titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
         
         ImageView titleLabel = new ImageView(new Image(getClass().getClassLoader().getResource(this.title).toExternalForm()));
         titleLabel.setFitWidth(290);
         titleLabel.setFitHeight(40);
-        
-        //Button logoutButton = new Button("Logout");
-        //logoutButton.setOnAction(event -> onLogoutHandle.run());
         
         ImageView logoutButton = new ImageView(new Image(getClass().getClassLoader().getResource("logout.png").toExternalForm()));
         logoutButton.setFitWidth(90);
         logoutButton.setFitHeight(50);
         
         logoutButton.setOnMouseClicked(event -> onLogoutHandle.run());
-        
-        //Label playerInputLabel = new Label("Enter Player Name:");
         
         ImageView playerInputLabel = new ImageView(new Image(getClass().getClassLoader().getResource("enter_player_name.png").toExternalForm()));
         playerInputLabel.setFitWidth(280);
@@ -72,17 +63,11 @@ public class GameSetupScene {
         
         ListView<String> playerListView = new ListView<>();
         
-        //Button addButton = new Button("Add Player");
-        //addButton.setOnAction(e -> addPlayer(playerInputField, playerListView));
-        
         ImageView addButton = new ImageView(new Image(getClass().getClassLoader().getResource("add_player.png").toExternalForm()));
         addButton.setFitWidth(160);
         addButton.setFitHeight(50);
         
         addButton.setOnMouseClicked(e -> addPlayer(playerInputField, playerListView));
-        
-        //Button doneButton = new Button("Done");
-        //doneButton.setOnAction(event -> this.generateDeckAndUserCard());
         
         ImageView doneButton = new ImageView(new Image(getClass().getClassLoader().getResource("create_game.png").toExternalForm()));
         doneButton.setFitWidth(160);
@@ -141,7 +126,7 @@ public class GameSetupScene {
         		isFirstInviaClick = false;
         	}
         }
-        
+
         String directoryPath = "./data/";
         String fullPath = "";
 
@@ -259,7 +244,7 @@ public class GameSetupScene {
                     e.printStackTrace();
                 }
         	} else {
-        		if(this.playerForRow % 2 == 0) {
+        		if(this.playerForRow % 2 == 0 && this.players >= 4) {
             		onLogoutHandle.run();	
         		} else {
                     this.errorLabel.setText("You have to add another player!");

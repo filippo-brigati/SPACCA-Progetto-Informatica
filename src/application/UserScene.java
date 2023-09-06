@@ -27,16 +27,14 @@ public class UserScene {
 	private Scene scene;
 	private Label messageLabel;
 	
-	private Runnable onGoBackHomeHandler;
+	private Runnable onGoBackAdminHandler;
 	
 	public UserScene() {
 		VBox vbox = new VBox(20);
 
-        // Create a TableView to display the user data
         TableView<Pair<String, Integer>> tableView = new TableView<>();
         tableView.setEditable(true);
-
-        // Create columns for the TableView
+        
         TableColumn<Pair<String, Integer>, String> usernameColumn = new TableColumn<>("Username");
         usernameColumn.setCellValueFactory(cellData -> {
             Pair<String, Integer> user = cellData.getValue();
@@ -72,18 +70,15 @@ public class UserScene {
         ObservableList<Pair<String, Integer>> userList = loadUserDataFromFile("./data/leaderboard.txt");
         tableView.setItems(userList);
 
-        //Button saveButton = new Button("Save Changes");
-        //saveButton.setOnAction(e -> saveUserDataToFile("./data/leaderboard.txt", tableView.getItems()));
-
         ImageView headerImage = new ImageView(new Image(getClass().getClassLoader().getResource("manage_user.png").toExternalForm()));
         headerImage.setFitWidth(600);
         headerImage.setFitHeight(80);
         headerImage.setPreserveRatio(true);
         
-        ImageView home = new ImageView(new Image(getClass().getClassLoader().getResource("home.png").toExternalForm()));
+        ImageView home = new ImageView(new Image(getClass().getClassLoader().getResource("previous.png").toExternalForm()));
         home.setFitWidth(110);
         home.setFitHeight(50);
-        home.setOnMouseClicked(event -> onGoBackHomeHandler.run());
+        home.setOnMouseClicked(event -> onGoBackAdminHandler.run());
         
         ImageView saveChanges = new ImageView(new Image(getClass().getClassLoader().getResource("save_changes.png").toExternalForm()));
         saveChanges.setFitWidth(180);
@@ -103,8 +98,8 @@ public class UserScene {
 		return this.scene;
 	}
 	
-	public void setOnGoBackHomeHandler(Runnable handler) {
-		onGoBackHomeHandler = handler;
+	public void setOnGoBackAdminHandler(Runnable handler) {
+		onGoBackAdminHandler = handler;
 	}
 	
     private ObservableList<Pair<String, Integer>> loadUserDataFromFile(String fileName) {

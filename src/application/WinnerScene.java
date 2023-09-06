@@ -111,7 +111,6 @@ public class WinnerScene {
             int indexOfHyphen = (this.gameCode + ".txt").indexOf('_');
 
             if (indexOfHyphen != -1) {
-                // Extract the substring before the first hyphen
             	mainTournamentFilePath = mainTournamentFilePath + (this.gameCode + ".txt").substring(0, indexOfHyphen) + ".txt";
             	this.mainFilePath = mainTournamentFilePath;
             } else {
@@ -302,7 +301,6 @@ public class WinnerScene {
         
         Map<String, Integer> mergedMap = new HashMap<>(player);
 
-        // Iterate through newDataMap and merge the data
         for (Map.Entry<String, Integer> entry : dataMap.entrySet()) {
             String username = entry.getKey();
             Integer score = entry.getValue();
@@ -359,7 +357,7 @@ public class WinnerScene {
                 System.err.println("Directory does not exist or is not a directory: ./data/");
             }
         } else {
-            System.out.println("No hyphen found in the input string.");
+            System.out.println("No _ found in the input string.");
         }
     }
     

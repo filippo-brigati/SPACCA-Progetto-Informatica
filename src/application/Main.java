@@ -10,14 +10,12 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
 
-        // Create the initial view
         createLoginView(null);
 
         primaryStage.setTitle("SPACCA");
         primaryStage.show();
     }
 
-    // Method to create the login view
     private void createLoginView(String fileCode) {
         LoginScene login = new LoginScene(fileCode);
         login.setOnLoginSuccess(() -> switchToHomeView());
@@ -26,13 +24,10 @@ public class Main extends Application {
         login.setOnInstruction(() -> switchToInstructionView());
         login.setOnLeaderBoard(() -> switchToLeaderBoardView());
         
-
-        // Set the login view as the root of the scene
         primaryStage.setTitle("LOGIN - SPACCA");
         primaryStage.setScene(login.getScene());
     }
 
-    // Method to create the adminScene view
     private void createHomeView() {
     	AdminScene adminScene = new AdminScene();
     	adminScene.setOnLogoutHandle(() -> switchToLoginView(null));
@@ -41,6 +36,7 @@ public class Main extends Application {
     	
     	primaryStage.setTitle("ADMIN - SPACCA");
     	primaryStage.setScene(adminScene.getScene());
+    	primaryStage.setResizable(false);
     }
     
     private void createGameView(String gameCode) {
@@ -50,6 +46,7 @@ public class Main extends Application {
     	
     	primaryStage.setTitle("GAME - SPACCA");
     	primaryStage.setScene(game.getScene());
+    	primaryStage.setResizable(false);
     }
     
     private void createWinView(String gameCode) {
@@ -59,6 +56,7 @@ public class Main extends Application {
     	
     	primaryStage.setTitle("GAME WINNER - SPACCA");
     	primaryStage.setScene(winner.getScene());
+    	primaryStage.setResizable(false);
     }
     
     private void createGameSetupView(boolean isTournament) {
@@ -71,6 +69,7 @@ public class Main extends Application {
     	
     	primaryStage.setTitle(title);
     	primaryStage.setScene(gameSetup.getScene());
+    	primaryStage.setResizable(false);
     }
     
     private void createTournamentLobbyView(String gameCode) {
@@ -80,6 +79,7 @@ public class Main extends Application {
     	
     	primaryStage.setTitle("TOURNAMENT " + gameCode + " - SPACCA");
     	primaryStage.setScene(trLobby.getScene());
+    	primaryStage.setResizable(false);
     }
     
     private void createLeaderboardView() {
@@ -88,6 +88,7 @@ public class Main extends Application {
     	
     	primaryStage.setTitle("LEADERBOARD - SPACCA");
     	primaryStage.setScene(lead.getScene());
+    	primaryStage.setResizable(false);
     }
     
     private void createInstructionView() {
@@ -96,22 +97,22 @@ public class Main extends Application {
     	
     	primaryStage.setTitle("INSTRUCTIONS - SPACCA");
     	primaryStage.setScene(instruction.getScene());
+    	primaryStage.setResizable(false);
     }
     
     private void createUserSceneView() {
     	UserScene user = new UserScene();
-    	user.setOnGoBackHomeHandler(() -> switchToLoginView(null));
+    	user.setOnGoBackAdminHandler(() -> switchToHomeView());
     	
     	primaryStage.setTitle("MANAGE USER - SPACCA");
     	primaryStage.setScene(user.getScene());
+    	primaryStage.setResizable(false);
     }
 
-    // Method to switch to the home view
     private void switchToHomeView() {
         createHomeView();
     }
 
-    // Method to switch to the login view
     private void switchToLoginView(String fileCode) {
         createLoginView(fileCode);
     }

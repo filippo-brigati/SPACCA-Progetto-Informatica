@@ -112,9 +112,14 @@ public class LoginScene {
         
         imageBox.getChildren().addAll(leaderBoardImage, instructionImage);
         
+        Label hint = new Label();
+        hint.setText("ENTER GAME CODE");
+        hint.setFont(new Font(15));
+        hint.setTextFill(Color.WHITE);
+        
         VBox vbox = new VBox(20);
         vbox.setAlignment(Pos.CENTER);
-        vbox.getChildren().addAll(imageBox, imageView, gameCodeField, buttonImage, hbox, loginImage);
+        vbox.getChildren().addAll(imageBox, imageView, hint, gameCodeField, buttonImage, hbox, loginImage);
         
         this.gridPane.add(vbox, 0, 0);
         this.gridPane.add(fileNotExistLabel, 0, 1);
